@@ -40,6 +40,12 @@ yarn-error.log*
 .claude/
 CLAUDE.md
 
+# local tasks & planning
+/tasks/
+
+# reference
+/reference/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
