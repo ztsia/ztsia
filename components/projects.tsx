@@ -27,9 +27,9 @@ import { FadeUp } from "@/components/fade-up"
 
 // TODO: Replace with actual demo access codes
 const CAMP_ACCESS_CODES = {
-  manager: "MANAGER_CODE",
-  hq: "HQ_CODE",
-  admin: "ADMIN_CODE",
+  manager: "GREEN_SECRET",
+  hq: "HQ_SECRET",
+  admin: "ADMIN_SECRET",
 }
 
 export function Projects() {
