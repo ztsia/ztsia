@@ -15,16 +15,16 @@ export function Skills() {
         <TechIcon name="react" label="React" />
         <TechIcon name="fastapi" label="FastAPI" />
         <TechIcon name="nodedotjs" label="Node.js" />
+        <TechIcon name="vuedotjs" label="Vue.js" />
       </div>
 
       <p className="text-sm text-muted-foreground font-mono mt-8 mb-4">AI & Infrastructure</p>
       <div className="flex flex-wrap gap-8 items-center">
         <TechIcon name="supabase" label="Supabase" />
-        <TechIcon name="googlegemini" label="Gemini" />
         <TechIcon name="docker" label="Docker" />
         <TechIcon name="langgraph" label="LangGraph" />
-        <TechIcon name="pgvector" label="pgvector" />
         <TechIcon name="ortools" label="OR-Tools" />
+        <TechIcon name="githubactions" label="GitHub Actions" />
       </div>
       </FadeUp>
     </section>

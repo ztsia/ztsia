@@ -185,9 +185,9 @@ Notes:
 - Video modal: 90-second full demo (YouTube unlisted embed)
 - No "GitHub" button on this card — private repos, link inside case study page instead
 
-#### Card 2 — AI-Powered Outdoor Event System
+#### Card 2 — Real-Time Outdoor Event System
 ```
-AI-Powered Outdoor Event System
+Real-Time Outdoor Event System
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Real-time PWA deployed live for a 60-participant outdoor event.
@@ -203,6 +203,15 @@ Notes:
 - Thumbnail: screenshot of territory map / HQ dashboard
 - Video modal: 60-second demo
 - Both GitHub and Live Demo buttons visible (repo is public)
+- "Live Demo" button opens a modal popup BEFORE redirecting, displaying role access codes:
+  ```
+  Manager code: [code]
+  HQ code: [code]
+  Admin code: [code]
+  
+  [Open Live Demo →]
+  ```
+  User sees credentials first, then clicks through to the live URL. Zero friction.
 
 #### Cards Layout
 - Desktop: 2 cards side by side
@@ -216,17 +225,19 @@ Notes:
 
 ```
 Core Stack
-[Python] [TypeScript] [Next.js] [React] [FastAPI] [Node.js]
+[Python] [TypeScript] [Next.js] [React] [FastAPI] [Node.js] [Vue.js]
 
 AI & Infrastructure  
-[LangGraph] [Supabase] [pgvector] [Google Gemini] [Docker] [OR-Tools]
+[LangGraph] [Supabase] [Docker] [OR-Tools] [GitHub Actions]
 ```
 
 Notes:
 - SVG logos with labels this time (unlike hero which is logos-only)
 - No progress bars — ever
 - No soft skills
-- No PHP, Laravel, Vue, n8n — already removed from resume, keep off portfolio too
+- No PHP, Laravel, n8n — keep off portfolio, dilutes AI/Full-Stack positioning
+- No Google Gemini — it's an API call, not a skill
+- No pgvector — FYP uses structured semantic chunking, not vector embeddings. Listing pgvector misrepresents the architecture.
 
 ---
 
@@ -267,13 +278,13 @@ Python AI microservice with 6 specialized LangGraph agents for
 adaptive learning, autonomous scheduling, and semantic knowledge processing.
 
 [Next.js] [React Native] [FastAPI] [LangGraph] [Supabase] 
-[OR-Tools] [FSRS] [Python] [TypeScript] [pgvector]
+[OR-Tools] [Python] [TypeScript] [Gemini API]
 
 [GitHub: fyp-ai-service ↗]  [Live Frontend ↗]  [Request Demo →]
 
 ─── DEMO VIDEO ─────────────────────────────────────
 
-[90-second demo video embed — YouTube unlisted, autoplay muted]
+[90-second demo video embed — YouTube unlisted, user-initiated play]
 
 ─── SYSTEM OVERVIEW ─────────────────────────────────
 
@@ -318,8 +329,8 @@ Each tab renders:
 │                     │  │                     │  │                     │
 │ RLS on all 19 tables│  │ FSRS + BKT-weighted │  │ 3 asyncio loops —   │
 │ Edge Function gateway│  │ EMA mastery scoring │  │ no Celery, no Cloud │
-│ 60s signed URLs     │  │ FSRS review scheduling│  │ Scheduler, zero     │
-│ DENY ALL default    │  │ per concept         │  │ external dependencies│
+│ Signed URL storage  │  │ FSRS review scheduling│  │ Scheduler, zero     │
+│ Bearer auth gateway │  │ per concept         │  │ external dependencies│
 └─────────────────────┘  └─────────────────────┘  └─────────────────────┘
 
 ─── REQUEST DEMO ────────────────────────────────────
@@ -327,7 +338,8 @@ Each tab renders:
 The AI service runs a persistent asyncio background scheduler 
 and cannot be hosted on serverless platforms.
 
-[Request a Live Demo]  → mailto:leosia929@gmail.com
+[Schedule a Demo Session →]
+→ mailto:leosia929@gmail.com?subject=FYP Demo Request — AI Academic Assistant&body=Hi Zhong Tai,%0A%0AI'd like to schedule a live demo of your AI Academic Assistant FYP.%0A%0AName:%0ACompany/Role:%0APreferred time:%0A%0AThanks
 
 I'll spin up a session — Parser Agent, RAG quiz generation, 
 and CP-SAT scheduling available to demo live.
@@ -347,7 +359,7 @@ and CP-SAT scheduling available to demo live.
 - **Key decisions:**
   - *Why CP-SAT over greedy?* Greedy fails when constraints interact. CP-SAT evaluates the full constraint space globally.
   - *Why ReAct pattern?* Dynamic tool selection allows the agent to choose between full scheduling, fast scheduling, and reschedule tools based on trigger context.
-  - *Why DB webhooks for conflict detection?* Missed sessions are detected at the data layer, not polled — zero latency between event and reschedule trigger.
+  - *Why daily cron for missed-session detection?* Missed sessions are identified by the daily background cron at 06:00 AM per-user local time — scanning for work sessions where end_time has passed but status is still scheduled. This keeps rescheduling logic centralised in one system rather than distributed across DB triggers.
 
 #### Tab 2: RAG
 - **One line:** Generates adaptive quizzes and topic summaries using a 3-Phase Chain-of-Thought approach, grounded by semantic learning chunks and calibrated to per-concept mastery scores.
@@ -363,7 +375,7 @@ and CP-SAT scheduling available to demo live.
 - **Key decisions:**
   - *Why SHA-256 file hashing over filename dedup?* Filenames change. Content doesn't. Hash-based dedup prevents reprocessing identical lecture slides uploaded under new names.
   - *Why networkx DAG for knowledge graphs?* Relationship primitives (includes, requires, contrasts with) need cycle detection. networkx validates the DAG structure before persistence, preventing corrupted graphs.
-  - *Why semantic chunking over fixed-size chunking?* Fixed-size chunks split mid-concept, destroying RAG retrieval quality. LLM-driven semantic chunking respects concept boundaries.
+  - *Why semantic chunking over fixed-size chunking?* Fixed-size chunks split mid-concept, destroying retrieval quality. LLM-driven semantic chunking respects concept boundaries and assigns difficulty tiers used by the FSRS scheduler downstream.
 
 #### Tab 4: Analytics
 - **One line:** Fan-out/fan-in parallel agent computing productivity metrics, learning progress, and behavior profiles — persisted as structured snapshots with AI-generated narratives.
@@ -446,11 +458,23 @@ Render Mermaid blocks by detecting ` ```mermaid ` fences and replacing with a cl
 
 **Never put credentials in any README or public repo.**
 
-**Camp PWA:** Add to portfolio detail section only:
-> "Live demo available. Contact me for role-specific access codes (Manager, HQ, Admin)."
+**Camp PWA:** Credentials are shown in a modal popup triggered by the "Live Demo" button on the project card. No email required — zero friction access.
+- The modal displays all 3 role codes (Manager, HQ, Admin) before redirecting to the live URL
+- Credentials are safe to expose publicly — the system contains no real user data
 
-**FYP AI Service:** Add to detail page:
-> "The AI Service runs a persistent asyncio scheduler and cannot be hosted on serverless platforms. [Request a Live Demo] — I'll spin up a session via ngrok."
+**FYP AI Service:** The AI service cannot be hosted on serverless platforms (persistent asyncio loops). Demo is by appointment via email.
+
+"Request a Live Demo" button on the FYP detail page uses a pre-filled `mailto:` link — one click opens the user's mail client with subject and body pre-written. They just hit send.
+
+```
+mailto:leosia929@gmail.com
+  ?subject=FYP Demo Request — AI Academic Assistant
+  &body=Hi Zhong Tai,%0A%0AI'd like to schedule a live demo of your AI Academic Assistant FYP.%0A%0AName:%0ACompany/Role:%0APreferred time:%0A%0AThanks
+```
+
+Button label: **"Schedule a Demo Session →"**
+
+Do NOT use a plain `mailto:leosia929@gmail.com` bare link — always use the pre-filled version so the recruiter doesn't have to write anything.
 
 ---
 
@@ -557,3 +581,104 @@ These decisions are final. Do not re-debate them during build:
 - ✅ Camp PWA has no detail page
 - ✅ `fyp-supabase-backend` stays private
 - ✅ Project name: "AI Academic Assistant" — no brand name
+
+---
+
+## 16. Corrections Log
+> **For Claude Code:** Apply all items below to the already-built codebase. Each correction is self-contained with exact location and what to change.
+
+---
+
+### Correction 1 — Remove `pgvector` from Skills Section
+**Location:** Section 5.5 Skills, AI & Infrastructure row  
+**Original:** `[LangGraph] [Supabase] [pgvector] [Google Gemini] [Docker] [OR-Tools]`  
+**Corrected:** `[LangGraph] [Supabase] [Docker] [OR-Tools] [Google Gemini] [GitHub Actions]`  
+**Reason:** The FYP uses structured semantic chunking, not vector embeddings or pgvector. Listing pgvector misrepresents the architecture and invites questions that contradict the resume and case study. `GitHub Actions` added as a replacement — it's accurate and ATS-searchable.
+
+---
+
+### Correction 2 — Remove `pgvector` and `FSRS` from FYP Detail Page Hero Tags
+**Location:** Section 6, FYP Detail Page Hero, tech stack chip row  
+**Original:** `[Next.js] [React Native] [FastAPI] [LangGraph] [Supabase] [OR-Tools] [FSRS] [Python] [TypeScript] [pgvector]`  
+**Corrected:** `[Next.js] [React Native] [FastAPI] [LangGraph] [Supabase] [OR-Tools] [Python] [TypeScript] [Gemini API]`  
+**Reason:** `pgvector` — same as Correction 1, not used. `FSRS` — this is an algorithm implemented in code, not a library or tool; listing it as a tech tag misrepresents what it is. Replaced both with `Gemini API` which is accurate and meaningful to a technical reader.
+
+---
+
+### Correction 3 — Rename Card 2 Project Title
+**Location:** Section 5.4, Card 2 title  
+**Original:** `AI-Powered Outdoor Event System`  
+**Corrected:** `Real-Time Outdoor Event System`  
+**Reason:** There is no AI in the Camp PWA. The original name was used on the resume for positioning, but on the portfolio where technical readers will click through to the GitHub repo and see the code, the "AI-Powered" label is inaccurate and will damage credibility. The engineering is strong enough without the label.
+
+---
+
+### Correction 4 — Add Access Code Note to Camp PWA Card
+**Location:** Section 5.4, Card 2 Notes  
+**Add:** "Live Demo button should include a tooltip or note: 'Contact for access codes' — do not send users to the live demo URL without warning them credentials are required."  
+**Reason:** A recruiter clicking Live Demo and hitting a login wall with no context is a dead end that creates friction and a bad first impression.
+
+---
+
+### Correction 5 — Fix Scheduler Tab: DB Webhooks → Daily Cron
+**Location:** Section 6, Agent Tab Content, Tab 1: Scheduler, third key decision  
+**Original:** `*Why DB webhooks for conflict detection?* Missed sessions are detected at the data layer, not polled — zero latency between event and reschedule trigger.`  
+**Corrected:** `*Why daily cron for missed-session detection?* Missed sessions are identified by the daily background cron at 06:00 AM per-user local time — scanning for work sessions where end_time has passed but status is still scheduled. This keeps rescheduling logic centralised in one system rather than distributed across DB triggers.`  
+**Reason:** The architecture docs confirm missed-session rescheduling is triggered by the Daily Cron's Job D, not DB webhooks. This was an error in the original spec that contradicts the actual implementation. The resume has already been corrected to reflect this.
+
+---
+
+### Correction 6 — Fix Demo Video Autoplay Note
+**Location:** Section 6, FYP Detail Page, DEMO VIDEO block  
+**Original:** `[90-second demo video embed — YouTube unlisted, autoplay muted]`  
+**Corrected:** `[90-second demo video embed — YouTube unlisted, user-initiated play]`  
+**Reason:** Section 7 (Video Implementation) explicitly states "autoplay=false, let user press play" for the detail page. The autoplay note in the page structure block contradicted this. Autoplay on a case study page is intrusive and inconsistent with the rest of the spec.
+
+---
+
+### Correction 7 — Fix Security Highlight Card Copy
+**Location:** Section 6, Infrastructure Highlights, Security card  
+**Original:** `60s signed URLs` and `DENY ALL default`  
+**Corrected:** `Signed URL storage` and `Bearer auth gateway`  
+**Reason:** "60s signed URLs" is an implementation detail that implies a specific timeout which may not be accurate. "DENY ALL default" is Supabase RLS terminology that reads as jargon without context. The corrected copy is cleaner and more accurate to what the card is communicating.
+
+---
+
+### Correction 8 — Camp PWA Live Demo: Replace "Contact for codes" with In-Page Modal
+**Location:** Section 5.4 Card 2 Notes + Section 9 Demo Access & Credentials  
+**Original:** "Contact for access codes" note on the Live Demo button  
+**Corrected:** "Live Demo" button triggers a modal popup displaying all 3 role access codes (Manager, HQ, Admin) before redirecting to the live URL. No email required.  
+**Implementation:**
+```
+Modal content:
+  Manager code: [code]
+  HQ code: [code]
+  Admin code: [code]
+  [Open Live Demo →]
+```
+**Reason:** Requiring users to email for credentials creates friction that causes drop-off. Camp PWA contains no real user data — credentials are safe to expose publicly. Zero friction = more recruiters actually try the demo.
+
+---
+
+### Correction 9 — FYP Demo Button: Pre-filled mailto link + Updated Button Label
+**Location:** Section 6 FYP Detail Page Request Demo block + Section 9 Demo Access & Credentials  
+**Original:** `[Request a Live Demo] → mailto:leosia929@gmail.com` (bare link, no pre-fill)  
+**Corrected:** Button label changed to "Schedule a Demo Session →". Link uses pre-filled mailto:
+
+```
+mailto:leosia929@gmail.com
+  ?subject=FYP Demo Request — AI Academic Assistant
+  &body=Hi Zhong Tai,%0A%0AI'd like to schedule a live demo of your AI Academic Assistant FYP.%0A%0AName:%0ACompany/Role:%0APreferred time:%0A%0AThanks
+```
+
+**Reason:** A bare mailto link dumps the recruiter into a blank compose window — they have to write the subject, figure out what to say, and decide what info to include. Pre-filling removes all of that. One click, one send. The structured body (Name / Company / Preferred time) also means you get actionable info in the first email instead of a back-and-forth. Always use the pre-filled version.
+
+---
+
+### Correction 10 — Skills Section: Remove Google Gemini, Add Vue.js to Core Stack
+**Location:** Section 5.5 Skills Section  
+**Original Core Stack:** `[Python] [TypeScript] [Next.js] [React] [FastAPI] [Node.js]`  
+**Original AI & Infrastructure:** `[LangGraph] [Supabase] [Docker] [OR-Tools] [Google Gemini] [GitHub Actions]`  
+**Corrected Core Stack:** `[Python] [TypeScript] [Next.js] [React] [FastAPI] [Node.js] [Vue.js]`  
+**Corrected AI & Infrastructure:** `[LangGraph] [Supabase] [Docker] [OR-Tools] [GitHub Actions]`  
+**Reason:** Google Gemini is an API call, not a skill — same reasoning as removing it from the resume. Listing an API as a skill misrepresents what it is and invites questions about model training and fine-tuning that don't apply. Vue.js is an honest addition — used in real internship/project work and already present on the resume frontend row.

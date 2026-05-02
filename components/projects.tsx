@@ -25,6 +25,13 @@ import Link from "next/link"
 import { VideoEmbed } from "@/components/video-embed"
 import { FadeUp } from "@/components/fade-up"
 
+// TODO: Replace with actual demo access codes
+const CAMP_ACCESS_CODES = {
+  manager: "MANAGER_CODE",
+  hq: "HQ_CODE",
+  admin: "ADMIN_CODE",
+}
+
 export function Projects() {
   return (
     <section id="projects" className="py-24 max-w-5xl mx-auto px-6">
@@ -108,7 +115,7 @@ export function Projects() {
               </DialogTrigger>
             </AspectRatio>
             <CardHeader>
-              <CardTitle>AI-Powered Outdoor Event System</CardTitle>
+              <CardTitle>Real-Time Outdoor Event System</CardTitle>
               <CardDescription>Real-time PWA deployed live for a 60-participant outdoor event</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
@@ -137,14 +144,41 @@ export function Projects() {
                 >
                   <Code2 data-icon="inline-start" className="h-3 w-3" /> GitHub
                 </a>
-                <a
-                  href="https://outdoor-game-manager-app.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
-                >
-                  <ExternalLink data-icon="inline-start" className="h-3 w-3" /> Live Demo
-                </a>
+                <Dialog>
+                  <DialogTrigger className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>
+                    <ExternalLink data-icon="inline-start" className="h-3 w-3" /> Live Demo
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-xs">
+                    <DialogHeader>
+                      <DialogTitle>Demo Access Codes</DialogTitle>
+                      <DialogDescription>
+                        Use a role-specific code to log in to the live demo.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-2 font-mono text-sm mt-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Manager</span>
+                        <span className="bg-muted px-2 py-1 rounded text-foreground">{CAMP_ACCESS_CODES.manager}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">HQ</span>
+                        <span className="bg-muted px-2 py-1 rounded text-foreground">{CAMP_ACCESS_CODES.hq}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Admin</span>
+                        <span className="bg-muted px-2 py-1 rounded text-foreground">{CAMP_ACCESS_CODES.admin}</span>
+                      </div>
+                    </div>
+                    <a
+                      href="https://outdoor-game-manager-app.vercel.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(buttonVariants({ variant: "default" }), "w-full mt-2")}
+                    >
+                      Open Live Demo →
+                    </a>
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardFooter>
           </Card>

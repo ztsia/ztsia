@@ -46,6 +46,9 @@ CLAUDE.md
 # reference
 /reference/
 
+# specs & documentation
+portfolio-spec.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
