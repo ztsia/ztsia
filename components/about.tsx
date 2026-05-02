@@ -4,7 +4,7 @@ export function About() {
   return (
     <section id="about" className="py-24 max-w-5xl mx-auto px-6">
       <FadeUp>
-      <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-6">About</p>
+      <p className="text-base font-mono uppercase tracking-wider text-muted-foreground mb-6">About</p>
       <div className="max-w-2xl space-y-4 text-foreground leading-relaxed">
         <p>
           Final year Software Engineering student at UTAR, graduating June 2026. I spent my

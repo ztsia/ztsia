@@ -36,7 +36,7 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 max-w-5xl mx-auto px-6">
       <FadeUp>
-      <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Projects</p>
+      <p className="text-base font-mono uppercase tracking-wider text-muted-foreground">Projects</p>
       <div className="grid md:grid-cols-2 gap-6 mt-8">
 
         {/* Card 1 — AI Academic Assistant */}

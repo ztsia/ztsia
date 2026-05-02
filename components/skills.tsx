@@ -5,7 +5,7 @@ export function Skills() {
   return (
     <section id="skills" className="py-24 max-w-5xl mx-auto px-6">
       <FadeUp>
-      <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Skills</p>
+      <p className="text-base font-mono uppercase tracking-wider text-muted-foreground">Skills</p>
 
       <p className="text-sm text-muted-foreground font-mono mt-8 mb-4">Core Stack</p>
       <div className="flex flex-wrap gap-8 items-center">

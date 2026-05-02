@@ -2,20 +2,26 @@
 
 import { useEffect, useState } from "react"
 import { Menu } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import {
   Sheet,
-  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetClose,
+  SheetFooter,
 } from "@/components/ui/sheet"
+import { Separator } from "@/components/ui/separator"
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,31 +80,47 @@ export function Navbar() {
         {/* Mobile Navigation */}
         <div className="flex md:hidden items-center gap-2">
           <ThemeToggle />
-          <Sheet>
-            <SheetTrigger render={<Button variant="ghost" size="icon" aria-label="Open menu" />}>
+          <Tooltip>
+            <TooltipTrigger
+              className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
+              aria-label="Open menu"
+              onClick={() => setSheetOpen(true)}
+            >
               <Menu className="h-5 w-5" />
-            </SheetTrigger>
-            <SheetContent side="right">
-              <SheetHeader>
-                <SheetTitle className="sr-only">Navigation</SheetTitle>
-              </SheetHeader>
-              <nav className="flex flex-col gap-4 pt-8">
-                <SheetClose render={<a href="#about" className="text-foreground hover:text-primary transition-colors" />}>
-                  About
-                </SheetClose>
-                <SheetClose render={<a href="#projects" className="text-foreground hover:text-primary transition-colors" />}>
-                  Projects
-                </SheetClose>
-                <SheetClose render={<a href="#skills" className="text-foreground hover:text-primary transition-colors" />}>
-                  Skills
-                </SheetClose>
-                <SheetClose render={<a href="#contact" className="text-foreground hover:text-primary transition-colors" />}>
-                  Contact
-                </SheetClose>
-              </nav>
-            </SheetContent>
-          </Sheet>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Navigation</TooltipContent>
+          </Tooltip>
         </div>
+
+        {/* Mobile Sheet */}
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          <SheetContent side="right" className="data-[side=right]:w-4/5 flex flex-col overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="font-mono font-semibold text-foreground">ztsia</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col px-2 mt-4 gap-1 flex-1">
+              {[
+                { label: "About", href: "#about" },
+                { label: "Projects", href: "#projects" },
+                { label: "Skills", href: "#skills" },
+                { label: "Contact", href: "#contact" },
+              ].map(({ label, href }) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setSheetOpen(false)}
+                  className="block rounded-md px-4 py-3 text-base font-medium text-foreground hover:bg-muted hover:text-primary transition-colors"
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+            <Separator />
+            <SheetFooter className="pt-4">
+              <ThemeToggle />
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </nav>
     </header>
   )
