@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 
 export function MarkdownRenderer({ content }: { content: string }) {
   return (
+    <div className="max-w-full">
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
@@ -33,6 +34,36 @@ export function MarkdownRenderer({ content }: { content: string }) {
         li({ children }) {
           return <li>{children}</li>
         },
+        pre({ children }) {
+          return (
+            <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs font-mono mb-3">
+              {children}
+            </pre>
+          )
+        },
+        table({ children }) {
+          return (
+            <div className="overflow-x-auto max-w-full mb-3">
+              <table className="text-sm text-muted-foreground border-collapse w-full">
+                {children}
+              </table>
+            </div>
+          )
+        },
+        th({ children }) {
+          return (
+            <th className="border border-border px-3 py-1.5 text-left text-xs font-mono font-semibold text-foreground">
+              {children}
+            </th>
+          )
+        },
+        td({ children }) {
+          return (
+            <td className="border border-border px-3 py-1.5 text-xs">
+              {children}
+            </td>
+          )
+        },
         code({ className, children }) {
           const match = /language-(\w+)/.exec(className || "")
           if (match?.[1] === "mermaid") {
@@ -48,5 +79,6 @@ export function MarkdownRenderer({ content }: { content: string }) {
     >
       {content}
     </ReactMarkdown>
+    </div>
   )
 }

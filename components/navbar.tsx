@@ -79,6 +79,7 @@ export function Navbar() {
 
         {/* Mobile Navigation */}
         <div className="flex md:hidden items-center gap-2">
+          <ThemeToggle />
           <Tooltip>
             <TooltipTrigger
               className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}

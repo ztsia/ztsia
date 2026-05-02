@@ -111,7 +111,7 @@ export default function FypDetailPage() {
   )
 
   return (
-    <div className="pt-16">
+    <div className="pt-16 overflow-x-hidden">
       <main className="max-w-5xl mx-auto px-6">
 
         {/* Back link — top */}

@@ -28,7 +28,7 @@ export function MermaidDiagram({ chart }: { chart: string }) {
   return (
     <div
       ref={ref}
-      className="my-4 overflow-x-auto rounded-lg border border-border p-4 bg-card"
+      className="my-4 max-w-full overflow-x-auto rounded-lg border border-border p-4 bg-card"
     />
   )
 }
