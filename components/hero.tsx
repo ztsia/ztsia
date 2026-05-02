@@ -44,7 +44,7 @@ export function Hero() {
         <TechIcon name="supabase" />
         <TechIcon name="nextdotjs" />
         <TechIcon name="fastapi" />
-        <span className="font-mono text-xs text-muted-foreground">LangGraph</span>
+        <TechIcon name="langgraph" />
       </div>
     </section>
   )

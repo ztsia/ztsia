@@ -42,7 +42,7 @@ export function Navbar() {
       <nav className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <a
-          href="#hero"
+          href="/#hero"
           className="font-mono font-semibold text-foreground hover:text-primary transition-colors"
         >
           ztsia
@@ -51,25 +51,25 @@ export function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
           <a
-            href="#about"
+            href="/#about"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             About
           </a>
           <a
-            href="#projects"
+            href="/#projects"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             Projects
           </a>
           <a
-            href="#skills"
+            href="/#skills"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             Skills
           </a>
           <a
-            href="#contact"
+            href="/#contact"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             Contact
@@ -99,10 +99,10 @@ export function Navbar() {
             </SheetHeader>
             <nav className="flex flex-col px-2 mt-4 gap-1 flex-1">
               {[
-                { label: "About", href: "#about" },
-                { label: "Projects", href: "#projects" },
-                { label: "Skills", href: "#skills" },
-                { label: "Contact", href: "#contact" },
+                { label: "About", href: "/#about" },
+                { label: "Projects", href: "/#projects" },
+                { label: "Skills", href: "/#skills" },
+                { label: "Contact", href: "/#contact" },
               ].map(({ label, href }) => (
                 <a
                   key={href}

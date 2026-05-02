@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -20,7 +21,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import { Code2, ExternalLink, Layers, Play } from "lucide-react"
+import { Check, Copy, ExternalLink, Layers, Play } from "lucide-react"
+import { InlineIcon } from "@/components/tech-icon"
 import Link from "next/link"
 import { VideoEmbed } from "@/components/video-embed"
 import { FadeUp } from "@/components/fade-up"
@@ -33,6 +35,14 @@ const CAMP_ACCESS_CODES = {
 }
 
 export function Projects() {
+  const [copied, setCopied] = useState<string | null>(null)
+
+  function copyCode(key: string, value: string) {
+    navigator.clipboard.writeText(value)
+    setCopied(key)
+    setTimeout(() => setCopied(null), 2000)
+  }
+
   return (
     <section id="projects" className="py-24 max-w-5xl mx-auto px-6">
       <FadeUp>
@@ -142,7 +152,7 @@ export function Projects() {
                   rel="noopener noreferrer"
                   className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
                 >
-                  <Code2 data-icon="inline-start" className="h-3 w-3" /> GitHub
+                  <InlineIcon name="github" className="h-3 w-3" /> GitHub
                 </a>
                 <Dialog>
                   <DialogTrigger className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>
@@ -156,18 +166,23 @@ export function Projects() {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-2 font-mono text-sm mt-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Manager</span>
-                        <span className="bg-muted px-2 py-1 rounded text-foreground">{CAMP_ACCESS_CODES.manager}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">HQ</span>
-                        <span className="bg-muted px-2 py-1 rounded text-foreground">{CAMP_ACCESS_CODES.hq}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Admin</span>
-                        <span className="bg-muted px-2 py-1 rounded text-foreground">{CAMP_ACCESS_CODES.admin}</span>
-                      </div>
+                      {(["manager", "hq", "admin"] as const).map((role) => (
+                        <div key={role} className="flex justify-between items-center gap-2">
+                          <span className="text-muted-foreground capitalize">{role}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="bg-muted px-2 py-1 rounded text-foreground">{CAMP_ACCESS_CODES[role]}</span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 shrink-0"
+                              onClick={() => copyCode(role, CAMP_ACCESS_CODES[role])}
+                              aria-label={`Copy ${role} code`}
+                            >
+                              {copied === role ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5" />}
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                     <a
                       href="https://outdoor-game-manager-app.vercel.app/"

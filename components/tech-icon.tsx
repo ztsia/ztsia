@@ -4,6 +4,22 @@ function slugToKey(slug: string) {
   return "si" + slug.charAt(0).toUpperCase() + slug.slice(1)
 }
 
+export function InlineIcon({ name, className }: { name: string; className?: string }) {
+  const icon = (si as Record<string, { path: string; title: string } | undefined>)[slugToKey(name)]
+  if (!icon) return null
+  return (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-label={icon.title}
+      className={className}
+    >
+      <path d={icon.path} />
+    </svg>
+  )
+}
+
 export function TechIcon({ name, label }: { name: string; label?: string }) {
   const key = slugToKey(name)
   const icon = (si as Record<string, { path: string; title: string } | undefined>)[key]
