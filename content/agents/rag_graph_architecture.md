@@ -1,6 +1,6 @@
 ---
 
-**RAG Agent**
+## RAG Agent
 Generates topic-adaptive quizzes and concept summaries from course materials, using each student's current mastery scores to target weak areas and calibrate question difficulty.
 
 ```mermaid
@@ -38,15 +38,31 @@ graph TD
     end
 ```
 
-**Key Engineering Decisions**
+## How it works
 
-**Mastery-weighted question allocation**
-A single-shot quiz prompt ignoring mastery produces uniform questions that waste time on concepts the student already knows. The 3-phase Chain-of-Thought approach first analyzes mastery scores to allocate question slots per concept, then outlines questions, then generates final JSON — so harder questions go to weaker concepts. The built-in self-correcting loop handles strict structural constraints (exactly 4 options, exactly 1 correct) without requiring a separate validation model.
+### Quiz path
+1. **Mastery check** — Reads the student's `concept_progress` scores to identify weak areas and allocate question slots by mastery weight.
+2. **Chunk retrieval** — Fetches relevant learning chunks for the targeted concepts.
+3. **Quiz generation** — 3-phase Chain-of-Thought: allocate question slots by mastery → outline questions → generate final JSON. A self-correcting loop retries if structural constraints (exactly 4 options, exactly 1 correct answer) are violated.
+4. **Persist** — Saves the generated quiz to the DB.
 
-**Out-of-band mastery update**
-Running FSRS scheduling and EMA mastery recalculation inside the LangGraph quiz path would block the graph until the user submits answers — which could be hours later. The mastery update instead runs as a separate FastAPI endpoint triggered only when the frontend posts quiz results, keeping the graph's responsibility limited to generation. This means quiz creation completes synchronously while the slower mastery recalculation runs asynchronously at answer submission time.
+### Mastery update (out-of-band)
+Triggered by the `/quiz/results` endpoint after the user submits answers. Runs Weighted EMA on the score and FSRS scheduling to compute `next_review_date`, then upserts `concept_progress`. Runs independently of quiz generation so quiz creation never blocks on user response time.
 
-**Cache-first summary routing**
-Regenerating a summary on every request wastes LLM calls for content that does not change between ingestion cycles. The summary path checks the `course_topics.summary` cache first and routes directly to END on a hit, only proceeding to generation on a miss. When a cache miss does occur, concurrent `asyncio.gather` per concept group keeps generation fast by running prose and visual code calls in parallel.
+### Summary path
+1. **Cache check** — Routes directly to END on a `course_topics.summary` hit.
+2. **Generate** — On cache miss, `asyncio.gather` runs prose and visual/code generation in parallel per concept group.
+3. **Assemble** — Merges and persists the generated summaries.
+
+## Key Engineering Decisions
+
+### Mastery-weighted question allocation
+A flat quiz prompt wastes questions on already-mastered concepts. The 3-phase CoT first allocates question slots by mastery score, then generates final JSON with a built-in self-correcting loop enforcing structural constraints (exactly 4 options, exactly 1 correct answer).
+
+### Out-of-band mastery update
+Running FSRS and EMA recalculation inside the quiz generation graph would block until the user submits answers — potentially hours later. Keeping it as a separate `/quiz/results` endpoint means quiz creation completes synchronously while mastery updates run asynchronously.
+
+### Cache-first summary routing
+Summaries are expensive to regenerate but rarely change between ingestion cycles. A cache hit on `course_topics.summary` routes directly to END. On a miss, `asyncio.gather` across concept groups keeps generation fast by running LLM calls in parallel.
 
 ---

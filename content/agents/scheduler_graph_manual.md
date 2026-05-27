@@ -1,6 +1,6 @@
 ---
 
-**Scheduler Agent**
+## Scheduler Agent
 Takes a user's tasks and places them as calendar sessions, balancing deadlines, work-hour preferences, and existing calendar events — routing simple events through a fast direct solver and complex multi-task jobs through an AI-driven constraint loop.
 
 ```mermaid
@@ -65,15 +65,33 @@ flowchart TD
     class orch_brain,orchestrator_tools process
 ```
 
-**Key Engineering Decisions**
+## How it works
 
-**CP-SAT over greedy scheduling**
-A greedy algorithm places sessions in the first available slot but cannot optimize across all constraints simultaneously — it misses the global optimum and has no backtracking when it paints itself into a corner. CP-SAT models the full constraint set (deadlines, work windows, session ordering, subject balance caps) and finds the mathematically optimal placement in a single pass. A 10-second solver timeout keeps latency acceptable while guaranteeing optimality up to that budget.
+### Fast path
+For single-event scheduling (`trigger == fast_schedule`)
+1. **Fetch context** — Loads user work preferences, preferred/avoid slots, fixed events, non-fixed events, and materialized routine blocks into a 28-day scheduling window.
+2. **Classify** — Deterministic keyword rules first (event type, title prefixes); ambiguous items fall back to a Gemini 3 Flash call. Routes to: `schedulable` → solver, `externally_fixed` → orchestrator, `unschedulable` → exit.
+3. **Solve** — CP-SAT places the event in the optimal slot within a 10-second budget. INFEASIBLE escalates to the orchestrator path.
 
-**3-pass constraint relaxation**
-When the solver returns INFEASIBLE, the alternative is to fail immediately and ask the user to manually remove tasks. Instead, a three-pass sequence progressively softens constraints — first loosening work-hour boundaries, then allowing displacement of non-fixed events with urgency-weighted penalties — so the system finds a schedule rather than giving up. Only when all three passes and a compromise round exhaust their options does the agent return UNSCHEDULABLE.
+### Orchestrator path
+For multi-task scheduling, conflict resolution, or fast-path failures
+1. **ReAct tool loop** — Gemini 2.5 Pro drives tool calls in sequence: `fetch_calendar_context` → `decompose_task` (LLM breaks the task into ordered sessions, cached per task ID) → `run_ortools_solver` → `propose_compromise` if INFEASIBLE (shrink/postpone/drop directives applied inline). Capped at 10 tool turns.
+2. **3-pass relaxation** — CP-SAT retries with progressively relaxed constraints: Pass 1 strict → Pass 2 soften work-hour boundaries → Pass 3 allow displacing non-fixed events (urgency-weighted penalties). Only after all three passes and a compromise round does the agent return UNSCHEDULABLE.
 
-**Decomposition caching across solver retries**
-Breaking a task into sub-sessions requires an LLM call that is both expensive and non-deterministic. The decomposed sessions are cached per task ID so Pass 1 → Pass 2 → Pass 3 retries reuse the same breakdown without re-querying the model. Only an explicit user request or a `force_redecompose=True` flag clears the cache, preventing redundant generation across the constraint relaxation loop.
+### Shared commit path
+3. **Format + HITL** — Proposal normalized with a UUID draft ID (48h TTL). Graph pauses for human review: approve, approve-with-edits, or refine (loops back to orchestrator, max 5 cycles).
+4. **Validate** — Re-fetches fixed walls from DB; rejects on overlap and routes back to HITL.
+5. **Commit** — Atomic RPC write (`commit_draft_schedule`). DB failure loops back to HITL for retry.
+
+## Key Engineering Decisions
+
+### CP-SAT over greedy scheduling
+A greedy algorithm misses the global optimum and has no backtracking when it reaches a dead end. CP-SAT models all constraints (deadlines, work windows, session ordering, subject balance caps) simultaneously, with a 10-second solver timeout guaranteeing optimality up to that budget.
+
+### 3-pass constraint relaxation
+When the solver returns INFEASIBLE, a three-pass sequence progressively softens constraints — first loosening work-hour boundaries, then allowing displacement of non-fixed events with urgency-weighted penalties — rather than failing immediately. Only after all three passes and a compromise round does the agent return UNSCHEDULABLE.
+
+### Decomposition caching across solver retries
+Task decomposition is an expensive, non-deterministic LLM call. Results are cached per task ID so Pass 1 → Pass 2 → Pass 3 retries reuse the same session breakdown without re-querying the model.
 
 ---

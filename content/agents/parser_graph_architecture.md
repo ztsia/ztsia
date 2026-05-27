@@ -1,6 +1,6 @@
 ---
 
-**Parser Agent**
+## Parser Agent
 Converts unstructured input — typed text, scanned documents, and timetable images — into structured task, event, or routine records through a staged extract-correct-classify-parse pipeline.
 
 ```mermaid
@@ -31,15 +31,23 @@ graph TD
     parse_routine --> END
 ```
 
-**Key Engineering Decisions**
+## How it works
 
-**Routine fast-path bypassing OCR**
-Timetables are spatially structured — classes arranged in columns and rows that OCR collapses into a flat string, destroying the schedule layout. Sending raw image bytes directly to Gemini Vision preserves the spatial context the model needs to correctly map time slots to classes. All other input types still go through EasyOCR and LLM correction because they are prose, not layout.
+1. **Route entry** — If `expected_type == "routine"`, jumps directly to `parse_routine` (Gemini Vision). All other types enter the standard extract → correct → classify pipeline.
+2. **Extract** — Images run through EasyOCR (bounding-box recognition); documents (PDF, DOCX, TXT) run through MarkItDown. All text is concatenated into `extracted_text`.
+3. **Correct** — `gemini-2.5-flash` at temp 0.1 cleans OCR noise (e.g., `"sqm Culfwrz cznter"` → `"SGM Cultural Center"`), producing `corrected_text`.
+4. **Classify** — `gemini-2.5-flash` at temp 0.0 (fully deterministic) classifies the input as `task` or `event`. Any error here short-circuits to END before the more expensive parse nodes run.
+5. **Parse** — The matching leaf node extracts its schema: task (`title`, `description`, `priority`, `due_date`) or event (`title`, `description`, `event_type`, `start_time`, `end_time`, `is_fixed`). Routine parser sends raw image bytes directly to Gemini Vision to preserve timetable spatial layout.
 
-**Classify before parse**
-Parsing a task and an event require different field sets, and a single combined extraction prompt produces ambiguous JSON with overlapping fields that neither schema can cleanly validate. Classifying first at temperature 0.0 — fully deterministic — lets each downstream leaf parser focus on its exact schema without hedging. The classification step also provides a clean error short-circuit: any classify failure routes directly to END before the more expensive parse nodes run.
+## Key Engineering Decisions
 
-**Rate-limit fallback model**
-Retrying the same model on a 429 error burns quota and adds latency proportional to the retry wait. Falling back immediately to `gemini-2.0-flash` on a single RESOURCE_EXHAUSTED error keeps the pipeline responsive under load without complex backoff logic. The fallback model is slightly less capable, but it completes the request rather than timing out the user.
+### Routine fast-path bypassing OCR
+OCR collapses a timetable's column/row layout into a flat string, destroying the schedule structure. Sending raw image bytes directly to Gemini Vision preserves spatial context — all other input types still go through EasyOCR because they are prose, not layout.
+
+### Classify before parse
+A single combined extraction prompt produces ambiguous JSON that neither task nor event schema can cleanly validate. Classifying first at temp 0.0 lets each leaf parser focus on its exact schema, and any classification failure short-circuits before the more expensive parse nodes run.
+
+### Rate-limit fallback model
+Retrying the same model on a 429 burns quota and adds latency proportional to the retry wait. A single `RESOURCE_EXHAUSTED` error immediately falls back to `gemini-2.0-flash` to complete the request rather than timing out the user.
 
 ---

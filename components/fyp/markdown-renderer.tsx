@@ -13,9 +13,16 @@ export function MarkdownRenderer({ content }: { content: string }) {
       components={{
         h2({ children }) {
           return (
-            <h2 className="text-xs font-mono uppercase tracking-wider text-muted-foreground mt-8 mb-3">
+            <h2 className="text-xs font-mono uppercase tracking-wider text-foreground border-b border-border pb-2 mt-10 mb-4">
               {children}
             </h2>
+          )
+        },
+        h3({ children }) {
+          return (
+            <h3 className="text-sm font-semibold text-primary mt-6 mb-2">
+              {children}
+            </h3>
           )
         },
         p({ children }) {
@@ -30,6 +37,9 @@ export function MarkdownRenderer({ content }: { content: string }) {
         },
         ul({ children }) {
           return <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1 mb-3">{children}</ul>
+        },
+        ol({ children }) {
+          return <ol className="list-decimal list-inside text-sm text-muted-foreground space-y-2 my-4 ml-1">{children}</ol>
         },
         li({ children }) {
           return <li>{children}</li>
