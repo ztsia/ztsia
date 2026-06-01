@@ -7,7 +7,7 @@ export function About() {
       <p className="text-base font-mono uppercase tracking-wider text-muted-foreground mb-6">About</p>
       <div className="max-w-2xl space-y-4 text-foreground leading-relaxed">
         <p>
-          Final year Software Engineering student at UTAR, graduating June 2026. I spent my
+          Final year Software Engineering student at UTAR, graduating September 2026. I spent my
           internship shipping a LangGraph multi-agent system at a Malaysian AI startup. My FYP is a
           full-stack AI academic platform — 6 LangGraph agents, a CP-SAT scheduling engine, FSRS
           spaced repetition, and a 19-table Supabase backend across 4 repositories.

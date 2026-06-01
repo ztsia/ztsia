@@ -10,7 +10,7 @@ export function Hero() {
         variant="outline"
         className="text-primary border-primary/40 rounded-full w-fit"
       >
-        Available July 2026 · Open to Remote
+        Available July 2026
       </Badge>
 
       <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mt-6">
