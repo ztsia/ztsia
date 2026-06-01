@@ -23,6 +23,7 @@ import {
 import { cn } from "@/lib/utils"
 import { Check, Copy, ExternalLink, Layers, Play } from "lucide-react"
 import { InlineIcon } from "@/components/tech-icon"
+import Image from "next/image"
 import Link from "next/link"
 import { VideoEmbed } from "@/components/video-embed"
 import { FadeUp } from "@/components/fade-up"
@@ -53,9 +54,12 @@ export function Projects() {
         <Dialog>
           <Card className="group flex flex-col overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
             <AspectRatio ratio={16 / 9} className="relative bg-muted">
-              <div className="flex h-full items-center justify-center text-muted-foreground">
-                <Layers className="h-8 w-8 opacity-40" />
-              </div>
+              <Image
+                src="/project_thumbnail/FYP_demo_thumbnail.jpg"
+                alt="AI Academic Assistant demo thumbnail"
+                fill
+                className="object-cover"
+              />
               <DialogTrigger
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
@@ -97,13 +101,12 @@ export function Projects() {
               </div>
             </CardFooter>
           </Card>
-          <DialogContent className="sm:max-w-2xl">
+          <DialogContent className="sm:max-w-4xl">
             <DialogHeader>
               <DialogTitle>AI Academic Assistant — Demo</DialogTitle>
-              <DialogDescription>90-second walkthrough of the full platform.</DialogDescription>
+              <DialogDescription>3-minute walkthrough of the full platform.</DialogDescription>
             </DialogHeader>
-            <VideoEmbed videoId="PLACEHOLDER_FYP" />
-            <p className="text-sm text-muted-foreground text-center">Demo video coming soon.</p>
+            <VideoEmbed videoId="FGOy59Ylnl4" />
           </DialogContent>
         </Dialog>
 

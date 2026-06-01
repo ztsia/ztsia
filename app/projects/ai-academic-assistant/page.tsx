@@ -163,7 +163,7 @@ export default function FypDetailPage() {
               rel="noopener noreferrer"
               className={cn(buttonVariants({ variant: "default" }), "gap-2")}
             >
-              <Mail className="h-4 w-4" /> Request Demo →
+              <Mail className="h-4 w-4" /> Request Live Demo →
             </a>
           </div>
         </section>
@@ -171,8 +171,7 @@ export default function FypDetailPage() {
         {/* Demo Video */}
         <section className="py-16 border-t border-border">
           <h2 className="text-2xl font-semibold text-foreground mb-6">Demo</h2>
-          <VideoEmbed videoId="PLACEHOLDER_FYP" autoplay={false} />
-          <p className="text-sm text-muted-foreground text-center mt-3">Demo video coming soon.</p>
+          <VideoEmbed videoId="FGOy59Ylnl4" autoplay={false} />
         </section>
 
         {/* System Overview */}
