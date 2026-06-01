@@ -10,14 +10,14 @@ export function About() {
           Final year Software Engineering student at UTAR, graduating September 2026. I spent my
           internship shipping a LangGraph multi-agent system at a Malaysian AI startup. My FYP is a
           full-stack AI academic platform — 6 LangGraph agents, a CP-SAT scheduling engine, FSRS
-          spaced repetition, and a 19-table Supabase backend across 4 repositories.
+          spaced repetition, and a production Supabase backend across 4 repositories.
         </p>
         <p className="text-muted-foreground">
           &ldquo;I&rsquo;m drawn to roles where AI is the product, not a feature.&rdquo;
         </p>
         <p>
-          When I&rsquo;m not building, I lead 100+ person concert operations as Concertmaster of
-          Galaxy Chamber Orchestra.
+          When I&rsquo;m not building, I lead concert operations for 100+ performer events as
+          Concertmaster of Galaxy Chamber Orchestra.
         </p>
       </div>
       </FadeUp>

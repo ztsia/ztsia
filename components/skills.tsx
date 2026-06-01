@@ -12,7 +12,6 @@ export function Skills() {
         <TechIcon name="python" label="Python" />
         <TechIcon name="typescript" label="TypeScript" />
         <TechIcon name="nextdotjs" label="Next.js" />
-        <TechIcon name="react" label="React" />
         <TechIcon name="fastapi" label="FastAPI" />
         <TechIcon name="nodedotjs" label="Node.js" />
         <TechIcon name="vuedotjs" label="Vue.js" />
