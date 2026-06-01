@@ -58,6 +58,7 @@ export function Projects() {
                 src="/project_thumbnail/FYP_demo_thumbnail.jpg"
                 alt="AI Academic Assistant demo thumbnail"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
               <DialogTrigger
@@ -118,6 +119,7 @@ export function Projects() {
                 src="/project_thumbnail/camp_pwa_demo-thumbnail.jpg"
                 alt="Real-Time Outdoor Event System demo thumbnail"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
               <DialogTrigger
