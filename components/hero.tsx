@@ -31,7 +31,7 @@ export function Hero() {
         <a href="#projects" className={cn(buttonVariants({ variant: "default" }))}>
           View My Work ↓
         </a>
-        <a href="/resume.pdf" download className={cn(buttonVariants({ variant: "outline" }))}>
+        <a href="/Sia_Zhong_Tai_Resume.pdf" download className={cn(buttonVariants({ variant: "outline" }))}>
           Download Resume
         </a>
       </div>
