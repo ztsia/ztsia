@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import { Check, Copy, ExternalLink, Layers, Play } from "lucide-react"
+import { Check, Copy, ExternalLink, Play } from "lucide-react"
 import { InlineIcon } from "@/components/tech-icon"
 import Image from "next/image"
 import Link from "next/link"
@@ -114,9 +114,12 @@ export function Projects() {
         <Dialog>
           <Card className="group flex flex-col overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
             <AspectRatio ratio={16 / 9} className="relative bg-muted">
-              <div className="flex h-full items-center justify-center text-muted-foreground">
-                <Layers className="h-8 w-8 opacity-40" />
-              </div>
+              <Image
+                src="/project_thumbnail/camp_pwa_demo-thumbnail.jpg"
+                alt="Real-Time Outdoor Event System demo thumbnail"
+                fill
+                className="object-cover"
+              />
               <DialogTrigger
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
@@ -200,13 +203,12 @@ export function Projects() {
               </div>
             </CardFooter>
           </Card>
-          <DialogContent className="sm:max-w-2xl">
+          <DialogContent className="sm:max-w-4xl">
             <DialogHeader>
               <DialogTitle>Outdoor Event System — Demo</DialogTitle>
-              <DialogDescription>60-second live event walkthrough.</DialogDescription>
+              <DialogDescription>Live event walkthrough.</DialogDescription>
             </DialogHeader>
-            <VideoEmbed videoId="PLACEHOLDER_CAMP" />
-            <p className="text-sm text-muted-foreground text-center">Demo video coming soon.</p>
+            <VideoEmbed videoId="4FgoOfoR5xg" />
           </DialogContent>
         </Dialog>
 
