@@ -2,7 +2,7 @@
 
 Building LangGraph agents, RAG pipelines, and the infrastructure behind them.
 
-**Available July 2026 · Open to Remote**
+**Available July 2026**
 
 ---
 
