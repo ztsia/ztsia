@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -52,7 +53,7 @@ export function Projects() {
 
         {/* Card 1 — AI Academic Assistant */}
         <Dialog>
-          <Card className="group flex flex-col overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
+          <Card className="relative group flex flex-col overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
             <AspectRatio ratio={16 / 9} className="relative bg-muted">
               <Image
                 src="/project_thumbnail/FYP_demo_thumbnail.jpg"
@@ -61,10 +62,17 @@ export function Projects() {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-foreground transition-opacity group-hover:opacity-0"
+              >
+                <Play className="h-3 w-3" />
+                Watch Demo
+              </div>
               <DialogTrigger
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  "absolute inset-0 h-full w-full rounded-none opacity-0 group-hover:opacity-100 transition-opacity"
+                  "absolute inset-0 z-10 h-full w-full rounded-none opacity-0 group-hover:opacity-100 transition-opacity"
                 )}
                 aria-label="Watch demo"
               >
@@ -72,8 +80,18 @@ export function Projects() {
               </DialogTrigger>
             </AspectRatio>
             <CardHeader>
-              <CardTitle>AI Academic Assistant</CardTitle>
+              <CardTitle>
+                <Link
+                  href="/projects/ai-academic-assistant"
+                  className="transition-colors hover:text-primary hover:underline underline-offset-4 after:absolute after:inset-0 after:content-['']"
+                >
+                  AI Academic Assistant
+                </Link>
+              </CardTitle>
               <CardDescription>Full-stack AI academic platform with 6 LangGraph agents</CardDescription>
+              <CardAction>
+                <Badge variant="outline" className="font-mono text-xs">Case Study</Badge>
+              </CardAction>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
               <p className="text-sm text-foreground/80 leading-relaxed">
@@ -89,16 +107,16 @@ export function Projects() {
               </div>
             </CardContent>
             <CardFooter>
-              <div className="flex gap-2">
-                <DialogTrigger render={<Button variant="outline" size="sm" />}>
-                  <Play data-icon="inline-start" className="h-3 w-3" /> Watch Demo
-                </DialogTrigger>
+              <div className="relative z-10 flex gap-2">
                 <Link
                   href="/projects/ai-academic-assistant"
-                  className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+                  className={cn(buttonVariants({ variant: "default", size: "sm" }))}
                 >
                   View Case Study →
                 </Link>
+                <DialogTrigger render={<Button variant="ghost" size="sm" />}>
+                  <Play data-icon="inline-start" className="h-3 w-3" /> Watch Demo
+                </DialogTrigger>
               </div>
             </CardFooter>
           </Card>
@@ -122,6 +140,13 @@ export function Projects() {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-foreground transition-opacity group-hover:opacity-0"
+              >
+                <Play className="h-3 w-3" />
+                Watch Demo
+              </div>
               <DialogTrigger
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
@@ -151,19 +176,8 @@ export function Projects() {
             </CardContent>
             <CardFooter>
               <div className="flex gap-2 flex-wrap">
-                <DialogTrigger render={<Button variant="outline" size="sm" />}>
-                  <Play data-icon="inline-start" className="h-3 w-3" /> Watch Demo
-                </DialogTrigger>
-                <a
-                  href="https://github.com/ztsia/outdoor-game-manager-app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
-                >
-                  <InlineIcon name="github" className="h-3 w-3" /> GitHub
-                </a>
                 <Dialog>
-                  <DialogTrigger className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>
+                  <DialogTrigger className={cn(buttonVariants({ variant: "default", size: "sm" }))}>
                     <ExternalLink data-icon="inline-start" className="h-3 w-3" /> Live Demo
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-xs">
@@ -202,6 +216,17 @@ export function Projects() {
                     </a>
                   </DialogContent>
                 </Dialog>
+                <a
+                  href="https://github.com/ztsia/outdoor-game-manager-app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+                >
+                  <InlineIcon name="github" className="h-3 w-3" /> GitHub
+                </a>
+                <DialogTrigger render={<Button variant="ghost" size="sm" />}>
+                  <Play data-icon="inline-start" className="h-3 w-3" /> Watch Demo
+                </DialogTrigger>
               </div>
             </CardFooter>
           </Card>
