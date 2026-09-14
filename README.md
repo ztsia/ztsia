@@ -7,9 +7,9 @@ infrastructure behind them.
 
 ---
 
-## What I'm Working On
+## The Most Complex Thing I've Built
 
-**AI Academic Assistant** — My final year project and the most complex thing I've built.
+**AI Academic Assistant** — my final year project, and still the largest system I've taken end to end.
 A full-stack AI academic platform across 4 repositories: 6 LangGraph agents, a CP-SAT constraint-based scheduler, FSRS spaced repetition, semantic chunking pipeline, and a 19-table Supabase backend. The AI service runs 3 independent asyncio loops natively in FastAPI lifespan — no Celery, no Cloud Scheduler.
 
 → [Portfolio & Case Study](https://ztsia.vercel.app)
