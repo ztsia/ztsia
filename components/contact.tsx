@@ -25,9 +25,9 @@ export function Contact() {
       <Separator />
       <section id="contact" className="py-24 max-w-5xl mx-auto px-6">
         <FadeUp>
-        <h2 className="text-2xl font-semibold text-foreground">Available July 2026</h2>
+        <h2 className="text-2xl font-semibold text-foreground">Get in touch</h2>
         <p className="text-muted-foreground mt-2">
-          Open to full-stack AI engineering roles — remote-friendly preferred.
+          Always happy to talk about backend systems, agent architectures, and AI engineering.
         </p>
         <div className="mt-8 flex flex-wrap gap-4">
           <a

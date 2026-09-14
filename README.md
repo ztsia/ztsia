@@ -1,8 +1,9 @@
-# Sia Zhong Tai — Full-Stack AI Engineer
+# Sia Zhong Tai — Software Engineer
 
-Building LangGraph agents, RAG pipelines, and the infrastructure behind them.
+Backend services in Kotlin and Spring Boot. LangGraph agents, RAG pipelines, and the
+infrastructure behind them.
 
-**Available July 2026**
+**Software Engineer @ Mode Fair**
 
 ---
 
@@ -19,7 +20,7 @@ A full-stack AI academic platform across 4 repositories: 6 LangGraph agents, a C
 
 **AI & Agents** — LangGraph · LLM Integration · RAG Pipelines · Prompt Engineering · n8n
 
-**Backend** — Python · FastAPI · Supabase · PostgreSQL · Node.js · REST APIs · Microservices
+**Backend** — Kotlin · Spring Boot · Java · Python · FastAPI · Supabase · PostgreSQL · Node.js · REST APIs
 
 **Frontend** — TypeScript · Next.js · React Native (Expo) · Tailwind CSS · shadcn/ui
 
@@ -33,6 +34,11 @@ A full-stack AI academic platform across 4 repositories: 6 LangGraph agents, a C
 6 LangGraph agents · CP-SAT scheduling · FSRS spaced repetition · Semantic chunking · FastAPI · Supabase · Next.js · React Native
 
 Adaptive learning platform with an autonomous ReAct scheduler, LLM-driven quiz generation using 3-Phase Chain-of-Thought, and a DAG knowledge graph pipeline. The background infrastructure runs 3 asyncio cron loops managing FCM push notifications, FSRS quiz planning, and missed session rescheduling — all within FastAPI lifespan.
+
+### Concert Ticketing & Check-in System
+Next.js · PostgreSQL/Drizzle · Playwright
+
+Concurrency-safe seat allocation, party waitlisting, PDF ticket generation, and an offline-capable QR check-in scanner. Spec-driven build where every module walks its real user flows in a browser before it can merge. *Public repo coming soon.*
 
 ### [Real-Time Outdoor Event System](https://github.com/ztsia/outdoor-game-manager-app)
 React 19 · Firebase Firestore · Tailwind CSS v4 · PWA · Vite
