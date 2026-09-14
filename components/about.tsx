@@ -7,10 +7,12 @@ export function About() {
       <p className="text-base font-mono uppercase tracking-wider text-muted-foreground mb-6">About</p>
       <div className="max-w-2xl space-y-4 text-foreground leading-relaxed">
         <p>
-          Final year Software Engineering student at UTAR, graduating September 2026. I spent my
-          internship shipping a LangGraph multi-agent system at a Malaysian AI startup. My FYP is a
-          full-stack AI academic platform — 6 LangGraph agents, a CP-SAT scheduling engine, FSRS
-          spaced repetition, and a production Supabase backend across 4 repositories.
+          Software Engineer at Mode Fair, building backend services in Kotlin and Spring Boot
+          within an AI-native engineering workflow. B.Software Engineering from UTAR, 2026.
+          Before this I shipped a LangGraph multi-agent system at a Malaysian AI startup, and
+          built a full-stack AI academic platform as my final year project — 6 LangGraph agents,
+          a CP-SAT scheduling engine, FSRS spaced repetition, and a Supabase backend across 4
+          repositories.
         </p>
         <p className="text-muted-foreground">
           &ldquo;I&rsquo;m drawn to roles where AI is the product, not a feature.&rdquo;
