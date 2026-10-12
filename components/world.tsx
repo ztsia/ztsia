@@ -1,50 +1,28 @@
 "use client"
 
-import { useRef } from "react"
-import { useGSAP, ScrollTrigger } from "@/lib/gsap"
-import { cn } from "@/lib/utils"
+import { ScrollTrigger } from "@/lib/gsap"
 
-export type WorldName = "zetix" | "study" | "field"
+export type WorldName = "zetix" | "study" | "field" | "ink"
 
 /**
- * A section that recolours the whole page while it fills the middle of the
- * viewport, by setting data-world on <html>. The palettes live in globals.css.
+ * Sets data-world on <html> while `el` fills the middle of the viewport, so
+ * dialogs and the page behind follow the section's palette. Sections paint
+ * themselves (.world-paint), so this only matters for what sits outside them.
+ * Refreshes after the pins, which change where sections sit.
  */
-export function World({
-  name,
-  id,
-  className,
-  children,
-  label,
-}: {
-  name: WorldName
-  id?: string
-  className?: string
-  children: React.ReactNode
-  label: string
-}) {
-  const ref = useRef<HTMLElement>(null)
-
-  useGSAP(() => {
-    const html = document.documentElement
-    const st = ScrollTrigger.create({
-      trigger: ref.current,
-      start: "top 55%",
-      end: "bottom 45%",
-      onToggle: (self) => {
-        if (self.isActive) html.dataset.world = name
-        else if (html.dataset.world === name) delete html.dataset.world
-      },
-    })
-    return () => {
-      st.kill()
+export function worldTrigger(el: Element, name: WorldName) {
+  const html = document.documentElement
+  return ScrollTrigger.create({
+    trigger: el,
+    start: "top 50%",
+    end: "bottom 50%",
+    refreshPriority: -1,
+    onToggle: (self) => {
+      if (self.isActive) html.dataset.world = name
+      else if (html.dataset.world === name) delete html.dataset.world
+    },
+    onKill: () => {
       if (html.dataset.world === name) delete html.dataset.world
-    }
-  }, [name])
-
-  return (
-    <section ref={ref} id={id} aria-label={label} data-world-section={name} className={cn("relative", className)}>
-      {children}
-    </section>
-  )
+    },
+  })
 }

@@ -26,7 +26,8 @@ export function Navbar() {
   const lenis = useLenis()
   const onHome = pathname === "/"
 
-  // Hide while reading down, show when scrolling back up
+  // Hide while reading down, show when scrolling back up. The bar has no
+  // ground of its own: it inverts whatever world is under it.
   useGSAP(() => {
     const el = header.current!
     const st = ScrollTrigger.create({
@@ -45,7 +46,7 @@ export function Navbar() {
     setOpen(false)
     if (!onHome || !lenis) return
     e.preventDefault()
-    lenis.scrollTo(hash, { offset: -64 })
+    lenis.scrollTo(hash)
     history.replaceState(null, "", hash)
   }
 
@@ -54,7 +55,7 @@ export function Navbar() {
       ref={header}
       data-hidden="false"
       data-scrolled="false"
-      className="w-fade fixed inset-x-0 top-0 z-50 border-b border-transparent text-w-fg transition-[transform,background-color,border-color,color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] data-[hidden=true]:-translate-y-full data-[scrolled=true]:border-w-rule data-[scrolled=true]:bg-w-bg/85 data-[scrolled=true]:backdrop-blur-md"
+      className="fixed inset-x-0 top-0 z-50 text-white mix-blend-difference transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] data-[hidden=true]:-translate-y-full"
     >
       <nav className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-4 sm:px-6 md:px-10">
         <a

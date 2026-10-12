@@ -1,6 +1,6 @@
 # Portfolio redesign: handoff
 
-State as of 12 Oct 2026. Branch `claude/trusting-lamport-9qc5q6`, PR ztsia/ztsia#4 (open, Vercel preview builds from it).
+State as of 12 Oct 2026 (round 2). Branch `claude/trusting-lamport-9qc5q6`, PR ztsia/ztsia#4 (open, Vercel preview builds from it).
 
 ## What the owner wants
 
@@ -11,44 +11,33 @@ State as of 12 Oct 2026. Branch `claude/trusting-lamport-9qc5q6`, PR ztsia/ztsia
 - Liked the Poster lens interaction, but worried hidden text goes unread, so everything under the lens is also listed in plain text (Stack section).
 - The AI Academic Assistant and outdoor event UIs were not great visually, and the AI Academic Assistant had several themes (the walkthrough happens to use the claymorphism one). So those worlds are art-directed from what the project does, not copied from its UI.
 
-## Owner's verdict on the current version (drives the next session)
+## Round 2: scroll choreography (12 Oct 2026)
 
-> More alive than before, but still a bit lame. It's just changing colours per project and adding some interaction. Where is the scrolling choreography? Where are GSAP and Lenis?
+The owner's verdict on round 1 was "more alive, but just colours and some interaction; where are GSAP and Lenis?". Round 2 rebuilt the home page as one scroll-driven sequence. Real material came from the project repos (`ztsia/zetix`, `fyp-web-frontend`, `fyp-ai-service`, `outdoor-game-manager-app`).
 
-That's fair. GSAP currently only does small, local things (listed below). There is no pinning, no scrubbed scene change, no transition between sections, and the world colour change is a plain CSS transition on toggle. **Next session: brainstorm and build real scroll choreography.** The owner wants to brainstorm first, so propose options before building.
-
-## What exists now
-
-| Area | File | What it does |
+| Beat | File | What scroll does |
 |---|---|---|
-| Tokens | `app/globals.css` | Index shell tokens; `--w-*` world tokens; `html[data-world="zetix" \| "study" \| "field"]` palettes; `html[data-world]` also remaps shadcn tokens so dialogs and cards follow the world |
-| Fonts | `app/layout.tsx` | Archivo (wdth axis) for the shell; Sora / Geist / Bricolage Grotesque for worlds (`preload: false`); JetBrains Mono for code |
-| GSAP registry | `lib/gsap.ts` | Registers ScrollTrigger, SplitText, Draggable, Flip, useGSAP; `MOTION_OK` media query for `gsap.matchMedia` |
-| Smooth scroll | `components/smooth-scroll.tsx` | `ReactLenis root`, driven by `gsap.ticker`; `ScrollTriggerSync` child calls `useLenis(ScrollTrigger.update)` |
-| Hero | `components/hero.tsx` | Chars rise and stretch (`--wdth` 62 to 86) on load; ringed lens sweeps once, then follows the cursor (tap on touch); letters near the lens widen to 125. Name: one line on md+, three on mobile |
-| World switch | `components/world.tsx` | Section that sets `data-world` on `<html>` via a ScrollTrigger toggle (top 55% to bottom 45%) |
-| Work | `components/work.tsx` | "Selected work" heading, then three `Project` panels: SplitText title reveal once, `[data-rise]` fades, demo rise |
-| Demos | `components/demos/*.tsx` | `scanner-demo` (Draggable ticket onto phone, duplicate refused, offline then sync), `scheduler-demo` (Flip blocks into week grid, labelled illustration), `territory-demo` (capture zones, Flip leaderboard, two-teams race) |
-| About | `components/about.tsx` | SplitText word-fill scrubbed on scroll, then timeline |
-| Stack | `components/skills.tsx` | Plain grouped lists (from README) |
-| Contact | `components/contact.tsx` | Inverted block, large email, copy button |
-| Nav | `components/navbar.tsx` | Hides on scroll down; links use `lenis.scrollTo` on the home page |
-| Case study | `app/projects/ai-academic-assistant/page.tsx` | Whole page in the `study` world via `components/world-page.tsx`; diagram recoloured, emoji removed |
+| Hero dive | `components/hero.tsx` | Pins; the name scales into the stem of the T (origin set from the T's offsets when the dive starts) until its ink fills the screen. The lens still works before you scroll |
+| Index | `components/work-index.tsx` | Ink table of contents; rows rise in. Hover fills a row in its project's colour, and a thumbnail trails the cursor. Pinned: the other rows leave, row 01 opens from its foot into a window that grows to full screen in Zetix's world (a ghost copy of the list keeps the title in place) |
+| Scenes | `components/scenes/scene-shell.tsx` | Shared shell: pins a 100svh stage, one timeline unit per chapter, captions hand over, a progress rule, then the real numbers count up, then the playground (demo, links, walkthrough) scrolls in. Static `.scene-static` copy for reduced motion / no JS |
+| Zetix | `components/scenes/zetix-scene.tsx` | Oriana Abernethy (the name on the real ticket screenshot) fills the form; two parties race for the last 5 seats under the lock (the real `claim_seats` `for update of s` SQL); the real ticket page arrives; the door scans, signal drops, offline admit, sync |
+| Passages | `components/scenes/transitions.tsx` | Calendar month fills in (into study); the screen is captured plot by plot in team colours (into field); paper sheets slide in from alternate sides (back to the shell) |
+| AI Academic Assistant | `components/scenes/study-scene.tsx` | Mock app window: notes chunked into a knowledge graph; tasks drop into the week, then "Approve plan"; quiz on the weakest concept with a forgetting curve; then the window re-skins through all 16 real themes from `theme-config.ts` |
+| Outdoor event | `components/scenes/field-scene.tsx` | The real venue map (traced from the app's `map.png`) draws itself; captures replay with a re-sorting leaderboard; the transaction race in slow motion; three role-tier devices |
+| Stack | `components/skills.tsx` | Two bands of huge type drifting, speeding up, reversing and widening on the wdth axis with Lenis velocity |
+| Contact | `components/contact.tsx` | Rises from under the page; email letters reveal, then widen near the cursor (the hero lens, once more) |
+| Folio | `components/folio.tsx` | Fixed bottom corners, blend-difference: chapter number and name (rolls on change) and page percentage |
+| Nav | `components/navbar.tsx` | No ground; `mix-blend-difference` so it reads over every world |
 
-Copy is factual and sourced from README.md and the previous site: Zetix 400 / 334 / 51 / 6; AI Academic Assistant 6 agents, 19 RLS tables, 3 asyncio loops, 4 repos; outdoor event 60 participants, 6 managers, 3 role tiers. Don't invent figures.
+Worlds: palettes now apply to any `[data-world]` element, not only `<html>`. Sections paint themselves with `.world-paint`, which is what lets transitions wipe between worlds. `worldTrigger()` in `components/world.tsx` still mirrors the current world onto `<html>` for dialogs. There's a new `ink` world (the shell inverted) for the index.
 
-## Brainstorm starting points (not decided)
+Assets: `public/scenes/zetix-*.webp`, converted from `zetix/docs/screenshots`.
 
-- **Hero to Work transition:** the lens grows to fill the screen and becomes the first project's world (scrubbed), or the name scales and pins while "Selected work" slides under it.
-- **Pinned project scenes:** pin each project and let scroll drive its story, instead of a static panel with a side demo. Examples:
-  - Zetix: one guest goes from sign-up form, to ticket email, to door scan.
-  - AI Academic Assistant: scroll runs the scheduler, then quizzes appear.
-  - Outdoor event: scroll replays captures on the map with the leaderboard moving.
-  Keep the demos playable at the end of each scene.
-- **Scrubbed world transitions:** clip-path or circle wipes between worlds, tied to scroll progress, rather than a CSS colour fade.
-- **Stack:** horizontal pan or a velocity-reactive marquee (one marquee per page at most).
-- **Case study:** Flip or page transition from the project panel into the page.
-- **Constraints:** honour `prefers-reduced-motion`, add mobile fallbacks via `gsap.matchMedia`, and see `.claude/skills/design-taste-frontend` sections 5.A and 5.B for sticky-stack and horizontal-pan skeletons.
+## Ideas not done yet
+
+- The case-study page is still only restyled. A Flip or page transition from the study scene into it would fit.
+- About is quiet: just the word fill plus the timeline. It could pin and stack the timeline as index cards.
+- Scenes are long (about 4.7 viewports each on desktop). Consider a "skip to demo" link in each scene header if visitors find them slow.
 
 ## Gotchas learned the hard way
 
@@ -59,10 +48,17 @@ Copy is factual and sourced from README.md and the previous site: Zetix 400 / 33
 5. **SplitText with lazily loaded fonts:** `autoSplit` re-splits when the font arrives. Return a standalone tween from `onSplit`, not one added to a shared timeline, or the title stays hidden.
 6. **React compiler lint** (eslint-config-next 16) flags `Math.random()` in handlers, `contextSafe` wrappers, and ref writes during render. Keep handlers plain and update refs in effects.
 7. **Theme inside worlds:** worlds are fixed light or dark whatever the site theme is. Mermaid picks `neutral` when `data-world` is set.
+8. **`gsap.utils.toArray(selector)` inside `useGSAP` is scoped** to the context's scope. To search the whole page, use `document.querySelectorAll` (see the folio).
+9. **A trigger on an element that pins itself ends early**: its `bottom` ignores its own pin. Pin an inner `[data-pin]` wrapper and put world and chapter triggers on the outer section (index, scenes).
+10. **World and chapter triggers use `refreshPriority: -1`** so they're computed after every pin, whatever order components mounted in.
+11. **Tailwind v4 `scale-*` / `translate-*` use the CSS `scale` / `translate` properties**, which stack with GSAP's `transform`. Don't put them on elements GSAP transforms.
+12. **Layout-level components mount before the streamed page.** Anything that reads page sections (the folio) lives in `app/page.tsx`.
+13. **Dev only:** `window.ScrollTrigger` is exposed (`lib/gsap.ts`) so Playwright can read pin positions.
 
 ## How to verify
 
 - `npx tsc --noEmit`, `npm run lint` (2 known errors, both in unused shadcn files: `components/ui/carousel.tsx`, `hooks/use-mobile.ts`), `npx next build`.
+- Tour script approach: open `/`, read `ScrollTrigger.getAll()` pin starts and ends, then `scrollTo` sample positions and wait about 900ms each (scrub is 0.6 to 0.7). Do one pass with `reducedMotion: "reduce"` (expect plain lists, no pins) and one real-wheel pass.
 - Playwright is installed globally (`$(npm root -g)/playwright`, Chromium at `/opt/pw-browsers`). For section shots, scroll in steps so ScrollTriggers fire in order, wait about 1.8s for world transitions, and check 1440px light and dark plus 390px.
 
 ## Open items

@@ -62,6 +62,12 @@
   --destructive-foreground: #1a0705;
 }
 
+/*
+  World palettes apply to <html> (set while a project fills the viewport, so
+  the nav and dialogs follow) and to each project's own section, which paints
+  itself with .world-paint so scroll transitions can wipe between them.
+*/
+
 /* Inside a world, the component tokens (dialogs, cards, tabs) follow it too */
 html[data-world] {
   --background: var(--w-bg);
@@ -82,7 +88,18 @@ html[data-world] {
   --input: var(--w-rule);
 }
 
-html[data-world="zetix"] {
+/* The shell turned over: ink ground, paper type (the work index) */
+[data-world="ink"] {
+  --w-bg: var(--ink);
+  --w-fg: var(--paper);
+  --w-soft: color-mix(in oklab, var(--paper) 62%, var(--ink));
+  --w-rule: color-mix(in oklab, var(--paper) 18%, var(--ink));
+  --w-accent: var(--paper);
+  --w-accent-fg: var(--ink);
+  --w-panel: color-mix(in oklab, var(--paper) 8%, var(--ink));
+}
+
+[data-world="zetix"] {
   --w-bg: #18161f;
   --w-fg: #f6f1ea;
   --w-soft: #aaa3b4;
@@ -95,7 +112,7 @@ html[data-world="zetix"] {
   color-scheme: dark;
 }
 
-html[data-world="study"] {
+[data-world="study"] {
   --w-bg: #eaf0f8;
   --w-fg: #0f1a3a;
   --w-soft: #4c5878;
@@ -108,7 +125,7 @@ html[data-world="study"] {
   color-scheme: light;
 }
 
-html[data-world="field"] {
+[data-world="field"] {
   --w-bg: #ffd84a;
   --w-fg: #17150c;
   --w-soft: #4d4520;
@@ -234,6 +251,16 @@ html[data-world="field"] {
     transition-duration: 0.8s;
     transition-timing-function: var(--ease-out-expo);
   }
+  .world-paint {
+    background-color: var(--w-bg);
+    color: var(--w-fg);
+  }
+  /* Elements re-skinned by the study scene's theme cycle */
+  .a-themed {
+    transition-property: background-color, color, border-color, border-radius, outline-color, fill, stroke;
+    transition-duration: 0.35s;
+    transition-timing-function: var(--ease-out-expo);
+  }
   .font-world {
     font-family: var(--w-font), var(--font-archivo), sans-serif;
   }
@@ -260,5 +287,21 @@ html[data-world="field"] {
 @media (prefers-reduced-motion: no-preference) {
   .js [data-intro] {
     visibility: hidden;
+  }
+}
+
+/*
+  Project scenes have a scroll-told version and a plain one. Exactly one is
+  displayed, so assistive tech only ever meets one copy.
+*/
+.scene-only {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene-only {
+    display: block;
+  }
+  .js .scene-static {
+    display: none;
   }
 }

@@ -57,7 +57,7 @@ export function About() {
   )
 
   return (
-    <section ref={ref} id="about" className="mx-auto max-w-[1400px] px-4 py-28 sm:px-6 md:px-10 md:py-40">
+    <section ref={ref} id="about" data-chapter="About" className="mx-auto max-w-[1400px] px-4 py-28 sm:px-6 md:px-10 md:py-40">
       <h2 className="sr-only">About</h2>
       <p
         data-fill

@@ -34,7 +34,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={mounted ? `Switch to ${next} theme` : "Switch theme"}
-      className="inline-flex h-9 min-w-12 items-center justify-center rounded-[2px] px-2 text-[15px] text-w-soft transition-colors hover:text-w-fg"
+      className="inline-flex h-9 min-w-12 items-center justify-center rounded-[2px] px-2 text-[15px] opacity-60 transition-opacity hover:opacity-100"
     >
       {mounted ? (next === "dark" ? "Dark" : "Light") : " "}
     </button>

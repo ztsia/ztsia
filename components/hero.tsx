@@ -31,6 +31,7 @@ export function Hero() {
         const lens = { x: 0, y: 0, r: 0 }
         let centers: { x: number; y: number }[] = []
         let live = false
+        let diving = false
 
         const measure = () => {
           const box = hero.getBoundingClientRect()
@@ -47,7 +48,7 @@ export function Hero() {
           ring.style.transform = `translate(${lens.x - d / 2}px, ${lens.y - d / 2}px)`
           ring.style.width = ring.style.height = `${d}px`
           ring.style.opacity = lens.r > 2 ? "1" : "0"
-          if (!live) return
+          if (!live || diving) return
           const reach = Math.max(lens.r * 2.1, 1)
           chars.forEach((c, i) => {
             const p = centers[i]
@@ -86,7 +87,7 @@ export function Hero() {
           return { x: e.clientX - box.left, y: e.clientY - box.top }
         }
         const onMove = (e: PointerEvent) => {
-          if (e.pointerType === "touch" || tl.isActive()) return
+          if (e.pointerType === "touch" || tl.isActive() || diving) return
           const p = local(e)
           toX(p.x)
           toY(p.y)
@@ -95,13 +96,56 @@ export function Hero() {
         const onLeave = () => gsap.to(lens, { r: 0, duration: 0.4, ease: "power3.in", overwrite: "auto" })
         // Touch: tap to drop the lens there for a moment
         const onDown = (e: PointerEvent) => {
-          if (e.pointerType !== "touch" || tl.isActive()) return
+          if (e.pointerType !== "touch" || tl.isActive() || diving) return
           const p = local(e)
           gsap.set(lens, { x: p.x, y: p.y })
           gsap.timeline()
             .to(lens, { r: LENS_R * 0.8, duration: 0.4, ease: "power3.out" })
             .to(lens, { r: 0, duration: 0.4, ease: "power3.in" }, "+=1.4")
         }
+
+        // Scrolling pins the hero and dives into the stem of the T until its
+        // ink fills the screen; the work index below starts on that same ink.
+        const name = nameRef.current!
+        const stem = chars[NAME[0].length + NAME[1].length]
+        // offsetLeft/Top ignore transforms, so this holds mid-dive too
+        const aim = () => {
+          const x = stem.offsetLeft + stem.offsetWidth * 0.5
+          const y = stem.offsetTop + stem.offsetHeight * 0.6
+          gsap.set(name, { transformOrigin: `${x}px ${y}px` })
+        }
+        const dive = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: () => `+=${window.innerHeight * 1.5}`,
+            pin: true,
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+            onRefresh: (self) => {
+              measure()
+              if (self.progress > 0) aim()
+            },
+            onUpdate: (self) => {
+              const now = self.progress > 0.002
+              if (now && !diving) {
+                // Settle the letters the lens had widened, then aim at the stem
+                gsap.killTweensOf(lens)
+                lens.r = 0
+                gsap.set(chars, { "--wdth": REST_WDTH })
+                aim()
+              }
+              if (!now && diving) measure()
+              diving = now
+            },
+          },
+        })
+        dive
+          .to("[data-hero-out]", { yPercent: 40, autoAlpha: 0, duration: 0.25, ease: "power2.in" }, 0)
+          .to(name, { scale: 1.12, duration: 0.2, ease: "power1.out" }, 0)
+          .to(name, { scale: () => Math.max(window.innerWidth, window.innerHeight) / stem.offsetWidth * 9, duration: 0.8, ease: "expo.in" }, 0.2)
+          .to("[data-hero-ink]", { autoAlpha: 1, duration: 0.08 }, 0.92)
 
         hero.addEventListener("pointermove", onMove)
         hero.addEventListener("pointerleave", onLeave)
@@ -111,6 +155,7 @@ export function Hero() {
 
         return () => {
           gsap.ticker.remove(render)
+          dive.scrollTrigger?.kill()
           hero.removeEventListener("pointermove", onMove)
           hero.removeEventListener("pointerleave", onLeave)
           hero.removeEventListener("pointerdown", onDown)
@@ -125,6 +170,7 @@ export function Hero() {
   return (
     <section
       id="hero"
+      data-chapter="Sia Zhong Tai"
       ref={root}
       className="relative isolate overflow-hidden"
     >
@@ -138,6 +184,8 @@ export function Hero() {
           {LENS_WORDS.repeat(10)}
         </p>
       </div>
+
+      <div data-hero-ink aria-hidden className="invisible absolute inset-0 z-30 bg-w-fg opacity-0" />
 
       <div
         ref={ringRef}
@@ -157,7 +205,7 @@ export function Hero() {
               <span
                 key={i}
                 data-char
-                className="inline-block will-change-transform"
+                className="inline-block"
                 style={{ fontVariationSettings: '"wdth" var(--wdth, 100)' }}
               >
                 {ch}
@@ -167,7 +215,7 @@ export function Hero() {
         ))}
       </h1>
 
-      <div data-intro className="relative z-20 mt-6 md:mt-8">
+      <div data-intro data-hero-out className="relative z-20 mt-6 md:mt-8">
         <div data-hero-rule className="h-0.5 w-full bg-w-fg" />
         <div data-hero-sub className="mt-5 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <p className="max-w-[46ch] text-lg leading-snug text-w-soft md:text-xl">
