@@ -149,10 +149,10 @@ export function Hero() {
         ref={nameRef}
         data-intro
         aria-label="Sia Zhong Tai"
-        className="relative -mb-[0.16em] flex flex-wrap gap-x-[0.18em] text-[min(25vw,9rem)] font-extrabold leading-[0.84] tracking-[-0.03em] sm:text-[min(19vw,11rem)] md:text-[min(15vw,19rem)]"
+        className="relative -mb-[0.16em] flex flex-col gap-x-[0.18em] text-[min(25vw,9rem)] font-extrabold leading-[0.84] tracking-[-0.03em] sm:text-[min(19vw,11rem)] md:flex-row md:flex-nowrap md:whitespace-nowrap md:text-[min(13.2vw,16.5rem)]"
       >
         {NAME.map((word) => (
-          <span key={word} aria-hidden className="inline-flex overflow-clip pb-[0.16em]">
+          <span key={word} aria-hidden className="inline-flex shrink-0 overflow-clip pb-[0.16em]">
             {word.split("").map((ch, i) => (
               <span
                 key={i}
