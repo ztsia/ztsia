@@ -7,15 +7,6 @@ infrastructure behind them.
 
 ---
 
-## What I'm Working On
-
-**AI Academic Assistant** — My final year project and the most complex thing I've built.
-A full-stack AI academic platform across 4 repositories: 6 LangGraph agents, a CP-SAT constraint-based scheduler, FSRS spaced repetition, semantic chunking pipeline, and a 19-table Supabase backend. The AI service runs 3 independent asyncio loops natively in FastAPI lifespan — no Celery, no Cloud Scheduler.
-
-→ [Portfolio & Case Study](https://ztsia.vercel.app)
-
----
-
 ## Stack
 
 **AI & Agents** — LangGraph · LLM Integration · RAG Pipelines · Prompt Engineering · n8n
@@ -30,15 +21,15 @@ A full-stack AI academic platform across 4 repositories: 6 LangGraph agents, a C
 
 ## Featured Projects
 
+### [Zetix](https://github.com/ztsia/zetix) — [live demo](https://zetix.vercel.app) · [walkthrough](https://youtu.be/tYE9JxSCns0)
+Next.js · PostgreSQL · Supabase · Drizzle · Playwright
+
+Ticketing for free concerts with unreserved seating — registration, seat allocation, tickets by email, and a door scanner. Built to replace a manual door check, where ushers searched a spreadsheet for each guest's name while the queue grew, and to keep audience data off free third-party platforms. v1 took about two weeks and ran a real chamber orchestra concert in September 2026: 400 tickets issued, 334 guests admitted by 7 ushers, peaking at 51 in five minutes. Seats are claimed by one row-locked Postgres function, so a show cannot be oversold, and its concurrency tests run in CI against a real Postgres, never a mock. Every send is idempotent, and the scanner admits guests from an offline roster — at the concert, two ushers' phones lost signal mid-rush and admitted 6 guests offline, syncing the scans when they reconnected. Spec-driven, with a QA gate on every module: before its PR opens, an independent QA agent writes acceptance criteria from the spec and walks the user flows in a real browser, happy and sad paths. Close to 100 Playwright end-to-end specs.
+
 ### [AI Academic Assistant](https://ztsia.vercel.app/projects/ai-academic-assistant)
 6 LangGraph agents · CP-SAT scheduling · FSRS spaced repetition · Semantic chunking · FastAPI · Supabase · Next.js · React Native
 
 Adaptive learning platform with an autonomous ReAct scheduler, LLM-driven quiz generation using 3-Phase Chain-of-Thought, and a DAG knowledge graph pipeline. The background infrastructure runs 3 asyncio cron loops managing FCM push notifications, FSRS quiz planning, and missed session rescheduling — all within FastAPI lifespan.
-
-### Concert Ticketing & Check-in System
-Next.js · PostgreSQL/Drizzle · Playwright
-
-Concurrency-safe seat allocation, party waitlisting, PDF ticket generation, and an offline-capable QR check-in scanner. Spec-driven build where every module walks its real user flows in a browser before it can merge. *Public repo coming soon.*
 
 ### [Real-Time Outdoor Event System](https://github.com/ztsia/outdoor-game-manager-app)
 React 19 · Firebase Firestore · Tailwind CSS v4 · PWA · Vite
@@ -50,7 +41,7 @@ Server-authoritative PWA deployed live across a 60-participant outdoor event. At
 ## Previously
 
 **Software Engineering Intern @ GenTech AI** *(Oct 2025 – Jan 2026)*
-Built a stateful LangGraph multi-agent system across 15–20 Trello boards. Architected a JSON-driven form engine for 8 Malaysian Tax Form C sub-forms with recursive rendering and Excel-like formula evaluation. Recovered 2 weeks of lost production work using LLM-assisted Git diff analysis — solo, in 2 days.
+Built a stateful multi-agent system (LangGraph + FastAPI) for project-board orchestration, shipped to staging and piloted across 3 boards. Built a JSON-driven low-code form engine (React/TypeScript) for Malaysian Tax Form C, covering 10+ form types.
 
 ---
 

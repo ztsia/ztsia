@@ -51,6 +51,84 @@ export function Projects() {
       <p className="text-base font-mono uppercase tracking-wider text-muted-foreground">Projects</p>
       <div className="grid md:grid-cols-2 gap-6 mt-8">
 
+        {/* Card — Zetix */}
+        <Dialog>
+          <Card className="group flex flex-col overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
+            <AspectRatio ratio={16 / 9} className="relative bg-muted">
+              <Image
+                src="/project_thumbnail/zetix_thumbnail.jpg"
+                alt="Zetix demo thumbnail"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-foreground transition-opacity group-hover:opacity-0"
+              >
+                <Play className="h-3 w-3" />
+                Watch Demo
+              </div>
+              <DialogTrigger
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "absolute inset-0 h-full w-full rounded-none opacity-0 group-hover:opacity-100 transition-opacity"
+                )}
+                aria-label="Watch demo"
+              >
+                <Play className="h-8 w-8" />
+              </DialogTrigger>
+            </AspectRatio>
+            <CardHeader>
+              <CardTitle>Zetix</CardTitle>
+              <CardDescription>Concert ticketing, from registration to the door — 400 tickets, 334 guests admitted at a real chamber orchestra concert</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-1 flex-col">
+              <p className="text-sm text-foreground/80 leading-relaxed">
+                Replaced a laptop-and-spreadsheet door check, keeping audience data off free third-party
+                platforms. Seats cannot oversell, email sends are idempotent, and the door scanner works offline.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-4">
+                {["Next.js", "PostgreSQL", "Supabase", "Drizzle", "Playwright"].map((tag) => (
+                  <Badge key={tag} variant="secondary" className="font-mono text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+            <CardFooter>
+              <div className="flex gap-2 flex-wrap">
+                <a
+                  href="https://zetix.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(buttonVariants({ variant: "default", size: "sm" }))}
+                >
+                  <ExternalLink data-icon="inline-start" className="h-3 w-3" /> Live Demo
+                </a>
+                <a
+                  href="https://github.com/ztsia/zetix"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+                >
+                  <InlineIcon name="github" className="h-3 w-3" /> GitHub
+                </a>
+                <DialogTrigger render={<Button variant="ghost" size="sm" />}>
+                  <Play data-icon="inline-start" className="h-3 w-3" /> Watch Demo
+                </DialogTrigger>
+              </div>
+            </CardFooter>
+          </Card>
+          <DialogContent className="sm:max-w-4xl">
+            <DialogHeader>
+              <DialogTitle>Zetix — Demo</DialogTitle>
+              <DialogDescription>Walkthrough from sign-up to the door.</DialogDescription>
+            </DialogHeader>
+            <VideoEmbed videoId="tYE9JxSCns0" />
+          </DialogContent>
+        </Dialog>
+
         {/* Card 1 — AI Academic Assistant */}
         <Dialog>
           <Card className="relative group flex flex-col overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
