@@ -81,7 +81,7 @@ export function Projects() {
             </AspectRatio>
             <CardHeader>
               <CardTitle>Zetix</CardTitle>
-              <CardDescription>Concert ticketing, from registration to the door — ran a real chamber orchestra concert</CardDescription>
+              <CardDescription>Concert ticketing, from registration to the door — 400 tickets, 334 guests admitted at a real chamber orchestra concert</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
               <p className="text-sm text-foreground/80 leading-relaxed">
