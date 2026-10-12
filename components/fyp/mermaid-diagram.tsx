@@ -13,7 +13,8 @@ export function MermaidDiagram({ chart }: { chart: string }) {
     const id = `mermaid-${Math.random().toString(36).slice(2)}`
     mermaid.initialize({
       startOnLoad: false,
-      theme: resolvedTheme === "dark" ? "dark" : "neutral",
+      // Pages in a light project world stay light whatever the site theme is
+      theme: resolvedTheme === "dark" && !document.documentElement.dataset.world ? "dark" : "neutral",
     })
     mermaid
       .render(id, chart)
@@ -28,7 +29,7 @@ export function MermaidDiagram({ chart }: { chart: string }) {
   return (
     <div
       ref={ref}
-      className="my-4 max-w-full overflow-x-auto rounded-lg border border-border p-4 bg-card"
+      className="my-4 max-w-full overflow-x-auto rounded-[var(--w-radius)] border border-border bg-card p-4"
     />
   )
 }

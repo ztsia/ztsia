@@ -13,7 +13,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
       components={{
         h2({ children }) {
           return (
-            <h2 className="text-xs font-mono uppercase tracking-wider text-foreground border-b border-border pb-2 mt-10 mb-4">
+            <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mt-10 mb-4">
               {children}
             </h2>
           )

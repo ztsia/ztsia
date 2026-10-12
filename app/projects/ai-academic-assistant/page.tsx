@@ -1,31 +1,32 @@
 import fs from "fs"
+import Link from "next/link"
 import path from "path"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { VideoEmbed } from "@/components/video-embed"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft, ExternalLink, Mail, ShieldCheck } from "lucide-react"
 import { InlineIcon } from "@/components/tech-icon"
 import { MermaidDiagram, AgentTabs } from "@/components/fyp/fyp-dynamic"
+import { WorldPage } from "@/components/world-page"
 
 const MASTER_DIAGRAM = `flowchart LR
     %% External Triggers
-    CRON["⏰ Cron Jobs<br/>(Daily / Hourly)"]
-    HOOK["🔗 DB Webhooks<br/>(Schedule Conflicts)"]
+    CRON["Cron Jobs<br/>(Daily / Hourly)"]
+    HOOK["DB Webhooks<br/>(Schedule Conflicts)"]
 
-    subgraph CLIENTS ["🖥️ Client Tier"]
+    subgraph CLIENTS ["Client Tier"]
         direction TB
         WEB["<b>Web Frontend</b><br/>(Next.js)"]
         MOBILE["<b>Mobile Frontend</b><br/>(Expo)"]
     end
 
-    subgraph BAAS ["☁️ Secure BaaS"]
+    subgraph BAAS ["Secure BaaS"]
         direction TB
-        EDGE["⚡ <b>Edge Functions</b><br/>(AI Gateway)"]
+        EDGE["<b>Edge Functions</b><br/>(AI Gateway)"]
 
-        subgraph DB ["🗄️ PostgreSQL Database"]
+        subgraph DB ["PostgreSQL Database"]
             direction TB
             DB1["Learning Chunks &<br/>Knowledge Graphs"]
             DB2["Tasks, Routines &<br/>Calendar Events"]
@@ -33,7 +34,7 @@ const MASTER_DIAGRAM = `flowchart LR
         end
     end
 
-    subgraph AI ["🧠 AI Service Tier"]
+    subgraph AI ["AI Service Tier"]
         direction TB
         ORCH["<b>FastAPI Server</b><br/>(Agent Orchestrator)"]
         A1["Agent 1:<br/>LMS Ingestion"]
@@ -44,7 +45,7 @@ const MASTER_DIAGRAM = `flowchart LR
         A6["Agent 6:<br/>Data Analytics"]
     end
 
-    subgraph EXT ["🌐 External Triggers & APIs"]
+    subgraph EXT ["External Triggers & APIs"]
         direction TB
         LLM["Google Gemini API<br/>(Pro & Flash)"]
         LMS["University LMS<br/>(Mock API)"]
@@ -78,12 +79,12 @@ const MASTER_DIAGRAM = `flowchart LR
     A1 & A2 & A3 & A4 & A6 -->|LLM Inference| LLM
 
     %% Styling
-    classDef clientBox fill:#3b82f6,stroke:#1e40af,color:#fff,font-weight:bold
-    classDef baasBox fill:#22c55e,stroke:#166534,color:#fff,font-weight:bold
-    classDef aiBox fill:#a855f7,stroke:#6b21a8,color:#fff,font-weight:bold
-    classDef dbBox fill:#dcfce7,stroke:#16a34a,color:#14532d,font-weight:bold
-    classDef extBox fill:#f97316,stroke:#c2410c,color:#fff,font-weight:bold
-    classDef triggerStyle fill:#fef3c7,stroke:#d97706,color:#92400e,font-weight:bold
+    classDef clientBox fill:#0f1a3a,stroke:#0f1a3a,color:#f3f6ff,font-weight:bold
+    classDef baasBox fill:#4c5878,stroke:#4c5878,color:#f3f6ff,font-weight:bold
+    classDef aiBox fill:#2340d0,stroke:#1a2f9e,color:#f3f6ff,font-weight:bold
+    classDef dbBox fill:#f7f9fd,stroke:#4c5878,color:#0f1a3a,font-weight:bold
+    classDef extBox fill:#c9d5ff,stroke:#2340d0,color:#16246e,font-weight:bold
+    classDef triggerStyle fill:#eaf0f8,stroke:#4c5878,color:#0f1a3a,font-weight:bold
 
     class WEB,MOBILE clientBox
     class EDGE baasBox
@@ -111,35 +112,34 @@ export default function FypDetailPage() {
   )
 
   return (
-    <div className="pt-16 overflow-x-hidden">
-      <main className="max-w-5xl mx-auto px-6">
+    <div className="font-world pt-16 overflow-x-hidden">
+      <WorldPage name="study" />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
 
         {/* Back link — top */}
         <div className="pt-12 pb-8">
-          <a href="/" className={cn(buttonVariants({ variant: "ghost" }), "gap-2 -ml-3")}>
-            <ArrowLeft className="h-4 w-4" /> Back to Portfolio
-          </a>
+          <Link href="/" className={cn(buttonVariants({ variant: "ghost" }), "gap-2 -ml-3")}>
+            <ArrowLeft className="h-4 w-4" /> Back to portfolio
+          </Link>
         </div>
 
         {/* Hero */}
         <section className="pb-16">
-          <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-4">
-            Final Year Project · UTAR · 2025–2026
+          <p className="text-sm text-muted-foreground mb-4">
+            Final year project, UTAR, 2025 to 2026
           </p>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
+          <h1 className="text-[clamp(2.75rem,7vw,5.5rem)] font-bold leading-[0.95] tracking-[-0.035em] text-foreground">
             AI Academic Assistant
           </h1>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-3xl">
-            A full-stack AI academic platform built across 4 repositories — cross-platform
+            A full-stack AI academic platform built across 4 repositories: cross-platform
             frontends, a production Supabase backend, and a Python AI microservice with 6
             specialized LangGraph agents for adaptive learning, autonomous scheduling, and
             semantic knowledge processing.
           </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {["Next.js", "React Native", "FastAPI", "LangGraph", "Supabase", "OR-Tools", "Python", "TypeScript", "Gemini API"].map((tag) => (
-              <Badge key={tag} variant="secondary" className="font-mono text-xs">{tag}</Badge>
-            ))}
-          </div>
+          <p className="mt-6 text-sm text-muted-foreground">
+            Next.js, React Native, FastAPI, LangGraph, Supabase, OR-Tools, Python, TypeScript, Gemini API
+          </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="https://github.com/ztsia/fyp-ai-service"
@@ -147,7 +147,7 @@ export default function FypDetailPage() {
               rel="noopener noreferrer"
               className={cn(buttonVariants({ variant: "outline" }), "gap-2")}
             >
-              <InlineIcon name="github" className="h-4 w-4" /> fyp-ai-service ↗
+              <InlineIcon name="github" className="h-4 w-4" /> fyp-ai-service
             </a>
             <a
               href="https://fyp-web-frontend-chi.vercel.app/"
@@ -155,7 +155,7 @@ export default function FypDetailPage() {
               rel="noopener noreferrer"
               className={cn(buttonVariants({ variant: "outline" }), "gap-2")}
             >
-              <ExternalLink className="h-4 w-4" /> Live Frontend ↗
+              <ExternalLink className="h-4 w-4" /> Live frontend
             </a>
             <a
               href="https://mail.google.com/mail/?view=cm&to=leosia929@gmail.com&su=FYP%20Demo%20Request%20%E2%80%94%20AI%20Academic%20Assistant&body=Hi%20Zhong%20Tai%2C%0A%0AI%27d%20like%20to%20schedule%20a%20live%20demo%20of%20your%20AI%20Academic%20Assistant%20FYP.%0A%0AName%3A%0ACompany%2FRole%3A%0APreferred%20time%3A%0A%0AThanks"
@@ -163,20 +163,20 @@ export default function FypDetailPage() {
               rel="noopener noreferrer"
               className={cn(buttonVariants({ variant: "default" }), "gap-2")}
             >
-              <Mail className="h-4 w-4" /> Request Live Demo →
+              <Mail className="h-4 w-4" /> Request a live demo
             </a>
           </div>
         </section>
 
         {/* Demo Video */}
         <section className="py-16 border-t border-border">
-          <h2 className="text-2xl font-semibold text-foreground mb-6">Demo</h2>
+          <h2 className="text-3xl font-bold tracking-[-0.02em] text-foreground mb-6">Demo</h2>
           <VideoEmbed videoId="FGOy59Ylnl4" autoplay={false} />
         </section>
 
         {/* System Overview */}
         <section className="py-16 border-t border-border">
-          <h2 className="text-2xl font-semibold text-foreground mb-6">System Overview</h2>
+          <h2 className="text-3xl font-bold tracking-[-0.02em] text-foreground mb-6">System overview</h2>
           <MermaidDiagram chart={MASTER_DIAGRAM} />
           <div className="mt-8 space-y-3">
             <p className="text-muted-foreground leading-relaxed">The platform operates across 4 tiers:</p>
@@ -192,7 +192,7 @@ export default function FypDetailPage() {
             <AlertTitle>Security model</AlertTitle>
             <AlertDescription>
               Frontends never call the AI service directly. All AI requests traverse Supabase Edge
-              Functions with Bearer token authentication — the AI service URL is never exposed to
+              Functions with Bearer token authentication, so the AI service URL is never exposed to
               the client.
             </AlertDescription>
           </Alert>
@@ -202,7 +202,7 @@ export default function FypDetailPage() {
         <AgentTabs markdown={agentMarkdown} />
         {/* Infrastructure Highlights */}
         <section className="py-16 border-t border-border">
-          <h2 className="text-2xl font-semibold text-foreground mb-8">Infrastructure Highlights</h2>
+          <h2 className="text-3xl font-bold tracking-[-0.02em] text-foreground mb-8">Infrastructure highlights</h2>
           <div className="grid sm:grid-cols-3 gap-4">
             <Card size="sm">
               <CardHeader>
@@ -245,7 +245,7 @@ export default function FypDetailPage() {
 
         {/* Request Demo */}
         <section className="py-16 border-t border-border">
-          <h2 className="text-2xl font-semibold text-foreground mb-3">Schedule a Demo</h2>
+          <h2 className="text-3xl font-bold tracking-[-0.02em] text-foreground mb-3">Request a live demo</h2>
           <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
             The AI service runs a persistent asyncio background scheduler and cannot be hosted on
             serverless platforms.
@@ -256,22 +256,22 @@ export default function FypDetailPage() {
               rel="noopener noreferrer"
             className={cn(buttonVariants({ variant: "default" }), "mt-6 gap-2")}
           >
-            <Mail className="h-4 w-4" /> Schedule a Demo Session →
+            <Mail className="h-4 w-4" /> Request a live demo
           </a>
           <p className="text-sm text-muted-foreground mt-4">
-            I'll spin up a session — Parser Agent, RAG quiz generation, and CP-SAT scheduling
-            available to demo live.
+            I&apos;ll spin up a session with the Parser Agent, RAG quiz generation, and CP-SAT
+            scheduling available to demo live.
           </p>
         </section>
 
         {/* Footer back link */}
         <div className="py-8 border-t border-border">
-          <a href="/" className={cn(buttonVariants({ variant: "ghost" }), "gap-2 -ml-3")}>
-            <ArrowLeft className="h-4 w-4" /> Back to Portfolio
-          </a>
+          <Link href="/" className={cn(buttonVariants({ variant: "ghost" }), "gap-2 -ml-3")}>
+            <ArrowLeft className="h-4 w-4" /> Back to portfolio
+          </Link>
         </div>
 
-      </main>
+      </div>
     </div>
   )
 }

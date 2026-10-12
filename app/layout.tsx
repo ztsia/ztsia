@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Archivo, JetBrains_Mono } from "next/font/google"
+import { Archivo, Bricolage_Grotesque, Geist, JetBrains_Mono, Sora } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
 import { Navbar } from "@/components/navbar"
@@ -9,6 +9,16 @@ const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
   axes: ["wdth"],
+})
+
+// Project-world faces load lazily; they only appear once a project scrolls in
+const sora = Sora({ variable: "--font-sora", subsets: ["latin"], preload: false })
+const geist = Geist({ variable: "--font-geist", subsets: ["latin"], preload: false })
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  axes: ["wdth", "opsz"],
+  preload: false,
 })
 
 const jetbrainsMono = JetBrains_Mono({
@@ -32,8 +42,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#eef0ec" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f1210" },
+    { media: "(prefers-color-scheme: light)", color: "#f2f2f0" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e0f" },
   ],
 }
 
@@ -45,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${archivo.variable} ${sora.variable} ${geist.variable} ${bricolage.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -55,7 +65,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-w-fg focus:px-4 focus:py-2 focus:text-w-bg"
         >
           Skip to content
         </a>

@@ -6,19 +6,17 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Palette: graphite with a faint green cast, one accent.
-  The accent is "admitted" green, the colour of a scan that went through
-  and a check that passed. It marks live things and interaction, nothing else.
+  Index: the site itself is paper and ink only. Colour arrives with the work:
+  each project section sets data-world on <html> and the page takes on that
+  project's palette, type and corner shape, then hands back.
 */
 :root {
-  --paper: #eef0ec;
-  --surface: #e3e6e0;
-  --surface-2: #d8dcd5;
-  --ink: #121513;
-  --ink-soft: #545b56;
-  --rule: #c9cec6;
-  --signal: #0a7347;
-  --signal-ink: #f3f7f4;
+  --paper: #f2f2f0;
+  --surface: #e6e6e3;
+  --surface-2: #dadad6;
+  --ink: #0d0d0e;
+  --ink-soft: #5f5f64;
+  --rule: #cfcfcb;
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -38,21 +36,89 @@
   --destructive-foreground: #fff7f5;
   --border: var(--rule);
   --input: var(--rule);
-  --ring: var(--signal);
+  --ring: var(--ink);
   --radius: 0.25rem;
+
+  /* World tokens: the shell's own values by default */
+  --w-bg: var(--paper);
+  --w-fg: var(--ink);
+  --w-soft: var(--ink-soft);
+  --w-rule: var(--rule);
+  --w-accent: var(--ink);
+  --w-accent-fg: var(--paper);
+  --w-panel: var(--surface);
+  --w-font: var(--font-archivo);
+  --w-radius: 2px;
 }
 
 .dark {
-  --paper: #0f1210;
-  --surface: #171b18;
-  --surface-2: #20251f;
-  --ink: #e4e8e2;
-  --ink-soft: #949c96;
-  --rule: #2a302b;
-  --signal: #4cc28a;
-  --signal-ink: #07130d;
+  --paper: #0e0e0f;
+  --surface: #19191b;
+  --surface-2: #232326;
+  --ink: #ededeb;
+  --ink-soft: #9a9a9f;
+  --rule: #2c2c2f;
   --destructive: #f97066;
   --destructive-foreground: #1a0705;
+}
+
+/* Inside a world, the component tokens (dialogs, cards, tabs) follow it too */
+html[data-world] {
+  --background: var(--w-bg);
+  --foreground: var(--w-fg);
+  --card: var(--w-panel);
+  --card-foreground: var(--w-fg);
+  --popover: var(--w-panel);
+  --popover-foreground: var(--w-fg);
+  --primary: var(--w-accent);
+  --primary-foreground: var(--w-accent-fg);
+  --secondary: var(--w-panel);
+  --secondary-foreground: var(--w-fg);
+  --muted: var(--w-panel);
+  --muted-foreground: var(--w-soft);
+  --accent: var(--w-panel);
+  --accent-foreground: var(--w-fg);
+  --border: var(--w-rule);
+  --input: var(--w-rule);
+}
+
+html[data-world="zetix"] {
+  --w-bg: #18161f;
+  --w-fg: #f6f1ea;
+  --w-soft: #aaa3b4;
+  --w-rule: #2e2a38;
+  --w-accent: #ff6a4d;
+  --w-accent-fg: #1a0b07;
+  --w-panel: #221f2b;
+  --w-font: var(--font-sora);
+  --w-radius: 999px;
+  color-scheme: dark;
+}
+
+html[data-world="study"] {
+  --w-bg: #eaf0f8;
+  --w-fg: #0f1a3a;
+  --w-soft: #4c5878;
+  --w-rule: #c9d4e8;
+  --w-accent: #2340d0;
+  --w-accent-fg: #f3f6ff;
+  --w-panel: #f7f9fd;
+  --w-font: var(--font-geist);
+  --w-radius: 8px;
+  color-scheme: light;
+}
+
+html[data-world="field"] {
+  --w-bg: #ffd84a;
+  --w-fg: #17150c;
+  --w-soft: #4d4520;
+  --w-rule: #e0b92a;
+  --w-accent: #17150c;
+  --w-accent-fg: #ffd84a;
+  --w-panel: #fff3c2;
+  --w-font: var(--font-bricolage);
+  --w-radius: 14px;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -82,8 +148,13 @@
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-rule: var(--rule);
-  --color-signal: var(--signal);
-  --color-signal-ink: var(--signal-ink);
+  --color-w-bg: var(--w-bg);
+  --color-w-fg: var(--w-fg);
+  --color-w-soft: var(--w-soft);
+  --color-w-rule: var(--w-rule);
+  --color-w-accent: var(--w-accent);
+  --color-w-accent-fg: var(--w-accent-fg);
+  --color-w-panel: var(--w-panel);
 
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
@@ -117,7 +188,11 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    @apply bg-background text-foreground;
+    background: var(--w-bg);
+    color: var(--w-fg);
+    transition:
+      background-color 0.8s var(--ease-out-expo),
+      color 0.8s var(--ease-out-expo);
     font-size: 1.0625rem;
     line-height: 1.6;
   }
@@ -130,18 +205,18 @@
     text-wrap: pretty;
   }
   ::selection {
-    background: var(--signal);
-    color: var(--signal-ink);
+    background: var(--w-fg);
+    color: var(--w-bg);
   }
   [id] {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 4.5rem;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   :focus-visible {
-    outline: 2px solid var(--signal);
+    outline: 2px solid var(--w-fg);
     outline-offset: 3px;
   }
 }
@@ -153,6 +228,14 @@
   }
   .font-narrow {
     font-variation-settings: "wdth" var(--wdth, 75);
+  }
+  .w-fade {
+    transition-property: color, background-color, border-color, border-radius;
+    transition-duration: 0.8s;
+    transition-timing-function: var(--ease-out-expo);
+  }
+  .font-world {
+    font-family: var(--w-font), var(--font-archivo), sans-serif;
   }
   .tabular {
     font-variant-numeric: tabular-nums;

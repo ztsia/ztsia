@@ -1,65 +1,73 @@
 "use client"
 
 import { useState } from "react"
-import { FadeUp } from "@/components/fade-up"
-import { buttonVariants } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
-import { Check, Mail } from "lucide-react"
-import { InlineIcon } from "@/components/tech-icon"
+import { Check, Copy } from "lucide-react"
 
 const EMAIL = "leosia929@gmail.com"
-const LINKEDIN_PATH = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.14-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
 
 export function Contact() {
-  const [emailCopied, setEmailCopied] = useState(false)
+  const [copied, setCopied] = useState(false)
 
-  function handleEmailClick() {
-    navigator.clipboard.writeText(EMAIL)
-    setEmailCopied(true)
-    setTimeout(() => setEmailCopied(false), 2000)
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Clipboard can be blocked; the address stays selectable
+    }
   }
 
   return (
-    <>
-      <Separator />
-      <section id="contact" className="py-24 max-w-5xl mx-auto px-6">
-        <FadeUp>
-        <h2 className="text-2xl font-semibold text-foreground">Get in touch</h2>
-        <p className="text-muted-foreground mt-2">
-          Always happy to talk about backend systems, agent architectures, and AI engineering.
+    <section id="contact" className="bg-w-fg text-w-bg w-fade">
+      <div className="mx-auto max-w-[1400px] px-4 pb-10 pt-28 sm:px-6 md:px-10 md:pt-40">
+        <h2 className="text-lg">Get in touch</h2>
+        <p className="mt-2 max-w-[48ch] opacity-70">
+          Happy to talk about backend systems, agent architectures and AI engineering.
         </p>
-        <div className="mt-8 flex flex-wrap gap-4">
+
+        <div className="mt-10 flex flex-wrap items-end gap-x-6 gap-y-4">
           <a
             href={`mailto:${EMAIL}`}
-            onClick={handleEmailClick}
-            className={cn(buttonVariants({ variant: "outline" }))}
+            className="link-draw font-wide whitespace-nowrap pb-1 text-[min(6.6vw,7.5rem)] font-extrabold leading-[0.95] tracking-[-0.03em] [--wdth:108]"
           >
-            {emailCopied
-              ? <><Check data-icon="inline-start" className="h-4 w-4" /> Copied!</>
-              : <><Mail data-icon="inline-start" className="h-4 w-4" /> {EMAIL}</>
-            }
+            {EMAIL}
           </a>
-          <a
-            href="https://www.linkedin.com/in/ztsia"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "ghost" }))}
+          <button
+            type="button"
+            onClick={copy}
+            className="mb-2 inline-flex h-10 items-center gap-2 rounded-[2px] px-4 text-sm font-medium shadow-[inset_0_0_0_1.5px_currentColor] transition-transform active:scale-[0.98]"
           >
-            <svg role="img" viewBox="0 0 24 24" fill="currentColor" aria-label="LinkedIn" className="h-4 w-4" data-icon="inline-start"><path d={LINKEDIN_PATH} /></svg> LinkedIn
-          </a>
-          <a
-            href="https://github.com/ztsia"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "ghost" }))}
-          >
-            <InlineIcon name="github" className="h-4 w-4" /> GitHub
+            {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+            {copied ? "Copied" : "Copy address"}
+          </button>
+        </div>
+
+        <ul className="mt-14 flex flex-wrap gap-x-8 gap-y-3 text-lg">
+          <li>
+            <a href="https://www.linkedin.com/in/ztsia" target="_blank" rel="noopener noreferrer" className="link-draw">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/ztsia" target="_blank" rel="noopener noreferrer" className="link-draw">
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="/Sia_Zhong_Tai_Resume.pdf" download className="link-draw">
+              Résumé (PDF)
+            </a>
+          </li>
+        </ul>
+
+        <div className="mt-28 flex flex-wrap items-end justify-between gap-4 border-t border-current/20 pt-6 text-sm opacity-70">
+          <span>Sia Zhong Tai, 2026</span>
+          <a href="#hero" className="link-draw">
+            Back to top
           </a>
         </div>
-        <p className="text-xs text-muted-foreground mt-16">Built by Sia Zhong Tai · 2026</p>
-        </FadeUp>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
