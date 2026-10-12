@@ -85,8 +85,8 @@ export function Projects() {
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
               <p className="text-sm text-foreground/80 leading-relaxed">
-                Seat claiming that cannot oversell — one row-locked Postgres function, tested against
-                a real database — idempotent email sends, and a phone scanner that admits guests offline.
+                Replaced a laptop-and-spreadsheet door check, keeping audience data off free third-party
+                platforms. Seats cannot oversell, email sends are idempotent, and the door scanner works offline.
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
                 {["Next.js", "PostgreSQL", "Supabase", "Drizzle", "Playwright"].map((tag) => (
