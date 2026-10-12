@@ -36,8 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude code tooling (local-only config)
-.claude/
+# claude code tooling (local-only config); project skills are shared
+.claude/*
+!.claude/skills/
 CLAUDE.md
 
 # local tasks & planning
