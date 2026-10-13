@@ -35,13 +35,20 @@ Assets: `public/scenes/zetix-*.webp`, converted from `zetix/docs/screenshots`.
 
 ## Adding a project
 
-1. Add the entry to `PROJECTS` in `components/work-index.tsx` (number, title, colours, thumbnail).
-2. Add a world palette in `app/globals.css` (`[data-world="name"]`) and its name to `WorldName` in `components/world.tsx`.
-3. Write a scene: `<SceneShell>` takes chapters, facts, a stage and an `animate(tl, ctx)` that adds tweens at `ctx.at(i)`. Mock screens go inside `<Fit width height>` (`components/scenes/fit.tsx`): build them at one design size, and they scale to the stage on phones.
-4. Mount it in `components/work.tsx` with a `<Playground>` child, and put a passage before it: reuse one from `transitions.tsx`, or add one with `Passage`.
-5. Update the "0N / 0M" strings. They are written by hand in each scene, transition card and index row.
+`lib/projects.ts` is the one list. Its order is the page order, and everything countable comes from it: the index rows and their numbers, "Three projects", every "02 / 03", the scene titles and anchors, the opening window (always the first project), the passages between neighbours, and the folio.
 
-Only the opening window from the index is wired to project 01 specifically.
+1. Add an entry to `PROJECTS` in `lib/projects.ts`: `id`, `world`, `title`, index-row text, `tagline` and `thumb`.
+2. Add its palette as `[data-world="name"]` in `app/globals.css`, and add the name to `WorldName` in `components/world.tsx`.
+3. Write `components/scenes/<name>-scene.tsx`:
+   - Render `<SceneShell project="<id>">` with chapters, facts, a stage, and `animate(tl, ctx)`. `animate` adds tweens at `ctx.at(i)`, one timeline unit per chapter.
+   - Put mock screens inside `<Fit width height>` (`components/scenes/fit.tsx`). Build them at one design size and they scale to the stage on phones.
+4. Add an entry for it in `SHOWCASES` in `components/work.tsx`:
+   - `Passage`, which leads into it from the previous project: `CalendarPassage`, `CapturePassage`, or a new one built on `Passage` in `transitions.tsx`.
+   - `Scene`, its scene wrapping a `<Playground>` with the demo.
+
+   `SHOWCASES` is typed `Record<ProjectId, …>`, so the build fails if a project has no showcase.
+
+Reordering projects is reordering `PROJECTS`. Passages take their `from` world from the previous project and their card from the incoming one.
 
 ## Ideas not done yet
 

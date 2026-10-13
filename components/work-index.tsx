@@ -6,44 +6,14 @@ import { useLenis } from "lenis/react"
 import { gsap, useGSAP, SCENE, MOTION_OK } from "@/lib/gsap"
 import { worldTrigger } from "@/components/world"
 import { cn } from "@/lib/utils"
+import { PROJECTS, folioOf, numberOf, projectCount } from "@/lib/projects"
 
-export const PROJECTS = [
-  {
-    n: "01",
-    id: "zetix",
-    title: "Zetix",
-    kind: "Ticketing for free concerts",
-    meta: "Ran a real concert, 2026",
-    thumb: "/project_thumbnail/zetix_thumbnail.jpg",
-    bg: "#18161f",
-    fg: "#ff6a4d",
-  },
-  {
-    n: "02",
-    id: "assistant",
-    title: "AI Academic Assistant",
-    kind: "Six LangGraph agents",
-    meta: "Final year project, 2025 to 2026",
-    thumb: "/project_thumbnail/FYP_demo_thumbnail.jpg",
-    bg: "#eaf0f8",
-    fg: "#2340d0",
-  },
-  {
-    n: "03",
-    id: "event",
-    title: "Real-time outdoor event system",
-    kind: "Live territory game",
-    meta: "60 participants on the day",
-    thumb: "/project_thumbnail/camp_pwa_demo-thumbnail.jpg",
-    bg: "#ffd84a",
-    fg: "#17150c",
-  },
-] as const
+const FIRST = PROJECTS[0]
 
 /**
  * The table of contents, set on the ink the hero dives into. Scrolling on
- * opens the first entry: its row becomes a window onto Zetix's world and
- * grows until it is the whole screen.
+ * opens the first entry: its row becomes a window onto that project's world
+ * and grows until it is the whole screen. Rows come from lib/projects.ts.
  */
 export function WorkIndex() {
   const root = useRef<HTMLElement>(null)
@@ -186,10 +156,10 @@ export function WorkIndex() {
         </div>
       </div>
 
-      {/* The first row's window, which grows into Zetix's world */}
+      {/* The first row's window, which grows into that project's world */}
       <div
         data-open
-        data-world="zetix"
+        data-world={FIRST.world}
         aria-hidden
         className="world-paint invisible absolute inset-0 z-30 grid place-items-center overflow-hidden"
       >
@@ -197,14 +167,14 @@ export function WorkIndex() {
           <IndexList ghost />
         </div>
         <div className="relative text-center">
-          <p data-open-meta className="font-world text-sm text-w-soft">01 / 03</p>
+          <p data-open-meta className="font-world text-sm text-w-soft">{folioOf(FIRST.id)}</p>
           <p
             data-open-title
             className="font-world text-[clamp(5rem,24vw,22rem)] font-semibold leading-[0.85] tracking-[-0.06em] text-w-accent"
           >
-            Zetix
+            {FIRST.title}
           </p>
-          <p data-open-meta className="font-world mt-6 text-lg text-w-soft">From sign-up to the door</p>
+          <p data-open-meta className="font-world mt-6 text-lg text-w-soft">{FIRST.tagline}</p>
         </div>
       </div>
       </div>
@@ -233,7 +203,7 @@ function IndexList({
       >
         <h2 className="font-wide text-[clamp(1.1rem,1.6vw,1.4rem)] font-bold [--wdth:125]">Selected work</h2>
         <p className="max-w-[44ch] text-[15px] text-w-soft">
-          Three projects. Each one opens into its own world, and ends with a small demo you can play with.
+          {projectCount()}. Each one opens into its own world, and ends with a small demo you can play with.
         </p>
       </div>
 
@@ -242,16 +212,17 @@ function IndexList({
           <li
             key={p.id}
             {...(ghost ? {} : { "data-row": "" })}
-            style={{ "--hb": p.bg, "--hf": p.fg } as React.CSSProperties}
             className={cn("group relative", ghost && i > 0 && "invisible")}
             onPointerEnter={() => onHover?.(i)}
           >
             {!ghost && (
               <>
                 <span data-row-rule aria-hidden className="absolute inset-x-0 top-0 h-px bg-w-rule" />
+                {/* Hover fills the row with the project's own ground */}
                 <span
                   aria-hidden
-                  className="absolute inset-0 origin-bottom scale-y-0 bg-[var(--hb)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-y-100"
+                  data-world={p.world}
+                  className="absolute inset-0 origin-bottom scale-y-0 bg-w-bg transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-y-100"
                 />
               </>
             )}
@@ -259,17 +230,19 @@ function IndexList({
               href={`#${p.id}`}
               onClick={(e) => onOpen?.(e, p.id)}
               tabIndex={ghost ? -1 : undefined}
-              {...(ghost ? { "data-ghost-title": "" } : {})}
+              {...(ghost ? { "data-ghost-title": "" } : { "data-world": p.world })}
               className={cn(
-                "relative block overflow-clip transition-colors duration-500 group-hover:text-[var(--hf)]",
-                ghost && "text-w-accent"
+                "relative block overflow-clip transition-colors duration-500",
+                // Takes the project's tokens for its hover colour; at rest it
+                // stays the index's paper-on-ink
+                ghost ? "text-w-accent" : "text-[var(--paper)] group-hover:text-w-accent"
               )}
             >
               <span
                 {...(ghost ? {} : { "data-row-inner": "" })}
                 className="grid grid-cols-[2.5rem_1fr] items-baseline gap-x-4 py-4 sm:grid-cols-[3.5rem_1fr_auto] md:py-5"
               >
-                <span className="tabular text-sm opacity-60">{p.n}</span>
+                <span className="tabular text-sm opacity-60">{numberOf(i)}</span>
                 <span
                   className="font-wide text-[clamp(2.1rem,6.2vw,6.2rem)] font-extrabold leading-[0.92] tracking-[-0.03em] [--wdth:108] transition-[font-variation-settings] duration-700 group-hover:[--wdth:122]"
                 >

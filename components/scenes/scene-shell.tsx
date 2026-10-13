@@ -2,7 +2,8 @@
 
 import { useRef } from "react"
 import { gsap, useGSAP, SCENE } from "@/lib/gsap"
-import { worldTrigger, type WorldName } from "@/components/world"
+import { worldTrigger } from "@/components/world"
+import { folioOf, projectOf, type ProjectId } from "@/lib/projects"
 import { cn } from "@/lib/utils"
 
 export type Chapter = { title: string; body: string }
@@ -26,10 +27,7 @@ export type SceneContext = {
  * the stage is skipped; the playground below carries the visuals.
  */
 export function SceneShell({
-  id,
-  world,
-  index,
-  title,
+  project,
   chapters,
   facts,
   factsNote,
@@ -37,10 +35,8 @@ export function SceneShell({
   animate,
   children,
 }: {
-  id: string
-  world: WorldName
-  index: string
-  title: string
+  /** Which entry in lib/projects.ts; title, world, anchor and "02 / 03" come from there */
+  project: ProjectId
   chapters: Chapter[]
   facts: Fact[]
   factsNote?: string
@@ -49,6 +45,8 @@ export function SceneShell({
   children: React.ReactNode
 }) {
   const root = useRef<HTMLElement>(null)
+  const { id, world, title } = projectOf(project)
+  const index = folioOf(project)
 
   useGSAP(
     () => {

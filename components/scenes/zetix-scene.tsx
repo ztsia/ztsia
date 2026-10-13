@@ -380,10 +380,7 @@ function QrGlyph({ seed }: { seed: string }) {
 export function ZetixScene({ children }: { children: React.ReactNode }) {
   return (
     <SceneShell
-      id="zetix"
-      world="zetix"
-      index="01 / 03"
-      title="Zetix"
+      project="zetix"
       chapters={CHAPTERS}
       facts={FACTS}
       factsNote="From the chamber orchestra concert Zetix ran in September 2026."

@@ -299,10 +299,7 @@ function Devices() {
 export function FieldScene({ children }: { children: React.ReactNode }) {
   return (
     <SceneShell
-      id="event"
-      world="field"
-      index="03 / 03"
-      title="Real-time outdoor event system"
+      project="event"
       chapters={CHAPTERS}
       facts={FACTS}
       factsNote="The map is the event's own venue map. The capture replay is an illustration."

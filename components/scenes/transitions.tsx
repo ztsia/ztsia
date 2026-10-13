@@ -3,6 +3,7 @@
 import { useRef } from "react"
 import { gsap, useGSAP, SCENE } from "@/lib/gsap"
 import type { WorldName } from "@/components/world"
+import { folioOf, projectOf, type ProjectId } from "@/lib/projects"
 import { cn } from "@/lib/utils"
 
 /**
@@ -60,12 +61,14 @@ function Passage({
   )
 }
 
-function Card({ index, title, sub, className }: { index: string; title: string; sub: string; className?: string }) {
+/** The project's title card, drawn in its world over the finished passage */
+function Card({ to }: { to: ProjectId }) {
+  const { world, title, tagline } = projectOf(to)
   return (
-    <div data-card className={cn("font-world absolute inset-0 grid place-items-center px-4 text-center", className)}>
+    <div data-card data-world={world} className="font-world absolute inset-0 grid place-items-center px-4 text-center">
       <div>
         <p data-card-bit className="tabular text-sm text-w-soft">
-          {index}
+          {folioOf(to)}
         </p>
         <p
           data-card-bit
@@ -74,7 +77,7 @@ function Card({ index, title, sub, className }: { index: string; title: string; 
           {title}
         </p>
         <p data-card-bit className="mt-6 text-lg text-w-soft">
-          {sub}
+          {tagline}
         </p>
       </div>
     </div>
@@ -83,11 +86,13 @@ function Card({ index, title, sub, className }: { index: string; title: string; 
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
-/** Zetix to the AI Academic Assistant: a month of calendar fills in, day by day */
-export function CalendarPassage() {
+type Between = { from: WorldName; to: ProjectId }
+
+/** Into a project about time: a month of calendar fills in, day by day */
+export function CalendarPassage({ from, to }: Between) {
   return (
     <Passage
-      from="zetix"
+      from={from}
       build={(tl, q) => {
         tl.fromTo(
           q("[data-cell]"),
@@ -96,17 +101,17 @@ export function CalendarPassage() {
           0
         )
           .fromTo(q("[data-day]"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, stagger: 0.01 }, 0.25)
-          .to(q("[data-cell]"), { borderColor: "rgba(201,212,232,0)", duration: 0.25 }, 0.85)
+          .to(q("[data-cell]"), { borderColor: "transparent", duration: 0.25 }, 0.85)
           .to(q("[data-day]"), { autoAlpha: 0, duration: 0.2 }, 0.85)
           .fromTo(q("[data-card-bit]"), { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.35, stagger: 0.06, ease: "expo.out" }, 0.95)
           .to({}, { duration: 0.2 })
       }}
     >
-      <div data-world="study" className="absolute inset-0 grid grid-cols-7 grid-rows-5">
+      <div data-world={projectOf(to).world} className="absolute inset-0 grid grid-cols-7 grid-rows-5">
         {Array.from({ length: 35 }, (_, i) => {
           const day = i - 2
           return (
-            <div key={i} data-cell className="origin-top-left border-b border-r border-[#c9d4e8] bg-w-bg p-2 text-w-soft md:p-3">
+            <div key={i} data-cell className="origin-top-left border-b border-r border-w-rule bg-w-bg p-2 text-w-soft md:p-3">
               <span data-day className="tabular text-[11px] md:text-sm">
                 {i < 7 && <span className="mr-1.5 hidden md:inline">{DAYS[i]}</span>}
                 {day > 0 && day <= 30 ? day : ""}
@@ -114,9 +119,7 @@ export function CalendarPassage() {
             </div>
           )
         })}
-        <div data-world="study" className="contents">
-          <Card index="02 / 03" title="AI Academic Assistant" sub="Six agents and a solver, planning a student's week" />
-        </div>
+        <Card to={to} />
       </div>
     </Passage>
   )
@@ -132,47 +135,47 @@ const TEAM_COLORS = ["#1f9a55", "#2e67dc", "#8248d8", "#d93a31"]
 // A fixed shuffle, so the captures land in the same order every time
 const ORDER = [6, 2, 11, 9, 0, 13, 4, 7, 14, 1, 10, 3, 12, 5, 8]
 
-/** The AI Academic Assistant to the outdoor event: the screen is captured, plot by plot */
-export function CapturePassage() {
+/** Into a project about territory: the screen is captured, plot by plot */
+export function CapturePassage({ from, to }: Between) {
   return (
     <Passage
-      from="study"
+      from={from}
       length={1.2}
       build={(tl, q) => {
         const plots = q("[data-plot]")
+        // Plots settle on the incoming world's ground
+        const ground = getComputedStyle(q("[data-plots]")[0]).getPropertyValue("--w-bg").trim()
         tl.fromTo(plots, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15, stagger: 0.01 }, 0)
         ORDER.forEach((p, i) => {
           const t = 0.15 + i * 0.05
-          tl.fromTo(plots[p], { backgroundColor: "rgba(255,216,74,0)" }, { backgroundColor: TEAM_COLORS[i % 4], duration: 0.04 }, t)
-            .to(plots[p], { backgroundColor: "#ffd84a", duration: 0.12 }, t + 0.08)
+          tl.fromTo(plots[p], { backgroundColor: "rgba(0,0,0,0)" }, { backgroundColor: TEAM_COLORS[i % 4], duration: 0.04 }, t)
+            .to(plots[p], { backgroundColor: ground, duration: 0.12 }, t + 0.08)
         })
-        tl.to(plots, { borderColor: "rgba(23,21,12,0)", duration: 0.2 }, 1.0)
+        tl.to(plots, { borderColor: "transparent", duration: 0.2 }, 1.0)
           .fromTo(q("[data-card-bit]"), { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.35, stagger: 0.06, ease: "expo.out" }, 1.0)
           .to({}, { duration: 0.2 })
       }}
     >
-      <div className="absolute inset-0">
+      <div data-plots data-world={projectOf(to).world} className="absolute inset-0">
         {PLOTS.map(([x, y, w, h], i) => (
           <div
             key={i}
             data-plot
-            className="absolute border-[1.5px] border-[#17150c]"
+            className="absolute border-[1.5px] border-w-fg"
             style={{ left: `${x}%`, top: `${y}%`, width: `${w}%`, height: `${h}%` }}
           />
         ))}
       </div>
-      <div data-world="field" className="contents">
-        <Card index="03 / 03" title="Real-time outdoor event system" sub="Sixty players, one live map" className="[&_p]:text-w-fg" />
-      </div>
+      <Card to={to} />
     </Passage>
   )
 }
 
-/** The outdoor event back to the paper shell: sheets slide in from alternate sides */
-export function PaperPassage() {
+/** The last project back to the paper shell: sheets slide in from alternate sides */
+export function PaperPassage({ from }: { from: WorldName }) {
   return (
     <Passage
-      from="field"
+      from={from}
       length={0.8}
       build={(tl, q) => {
         tl.fromTo(

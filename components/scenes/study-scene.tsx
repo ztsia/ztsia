@@ -175,7 +175,7 @@ function App() {
       <div
         data-app
         style={{ ...themeVars(THEMES[0]), fontFamily: "var(--a-font)" } as React.CSSProperties}
-        className="a-themed relative flex size-full max-w-[44rem] md:aspect-[4/3] md:h-auto md:max-h-full overflow-hidden rounded-[calc(var(--a-radius)*1.2)] border border-[var(--a-border)] bg-[var(--a-bg)] text-[var(--a-fg)] shadow-[0_40px_80px_-40px_rgba(15,26,58,0.45)]"
+        className="a-themed relative flex aspect-[4/5] max-h-full w-full max-w-[44rem] overflow-hidden md:aspect-[4/3] rounded-[calc(var(--a-radius)*1.2)] border border-[var(--a-border)] bg-[var(--a-bg)] text-[var(--a-fg)] shadow-[0_40px_80px_-40px_rgba(15,26,58,0.45)]"
       >
         <aside className="a-themed hidden w-14 shrink-0 flex-col items-center gap-3 border-r border-[var(--a-border)] bg-[var(--a-card)] py-4 sm:flex">
           <span className="a-themed size-7 rounded-[var(--a-radius)] bg-[var(--a-primary)]" />
@@ -206,7 +206,8 @@ function App() {
 
 function IngestView() {
   return (
-    <div data-view-ingest className="absolute inset-3 grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-3 sm:inset-4">
+    // Stacked on phones (notes on top, graph below), side by side from sm up
+    <div data-view-ingest className="absolute inset-3 grid grid-rows-[auto_minmax(0,1fr)] gap-3 sm:inset-4 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] sm:grid-rows-1">
       <div className="a-themed flex min-h-0 flex-col rounded-[var(--a-radius)] border border-[var(--a-border)] bg-[var(--a-card)] p-3">
         <p className="truncate text-[11px] font-semibold">Week 3: Morphological operations.pdf</p>
         <p className="text-[10px] opacity-60">Synced from the LMS</p>
@@ -378,10 +379,7 @@ function QuizView() {
 export function StudyScene({ children }: { children: React.ReactNode }) {
   return (
     <SceneShell
-      id="assistant"
-      world="study"
-      index="02 / 03"
-      title="AI Academic Assistant"
+      project="assistant"
       chapters={CHAPTERS}
       facts={FACTS}
       factsNote="Final year project, UTAR. The scenes above are illustrations of how each agent works."

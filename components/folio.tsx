@@ -40,21 +40,23 @@ export function Folio() {
           .fromTo(roll, { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: "expo.out" })
       }
 
-      const triggers = sections.map((s, i) =>
-        ScrollTrigger.create({
-          trigger: s,
-          start: "top 50%",
-          end: "bottom 50%",
-          refreshPriority: -1,
-          onToggle: (self) => self.isActive && show(i),
-        })
+      // Chapter markers only; the current one is read off the scroll position
+      // each update, so a jump straight past a chapter can't leave it stale
+      const triggers = sections.map((s) =>
+        ScrollTrigger.create({ trigger: s, start: "top 50%", end: "bottom 50%", refreshPriority: -1 })
       )
       const progress = ScrollTrigger.create({
         start: 0,
         end: "max",
-        refreshPriority: -1,
+        refreshPriority: -2,
         onUpdate: (self) => {
           pct.textContent = String(Math.round(self.progress * 100)).padStart(3, "0")
+          const y = self.scroll()
+          let i = 0
+          triggers.forEach((t, k) => {
+            if (t.start <= y) i = k
+          })
+          show(i)
         },
       })
       show(0)

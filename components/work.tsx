@@ -1,5 +1,6 @@
 "use client"
 
+import { Fragment } from "react"
 import Link from "next/link"
 import { WorkIndex } from "@/components/work-index"
 import { ZetixScene } from "@/components/scenes/zetix-scene"
@@ -10,13 +11,23 @@ import { ScannerDemo } from "@/components/demos/scanner-demo"
 import { SchedulerDemo } from "@/components/demos/scheduler-demo"
 import { TerritoryDemo } from "@/components/demos/territory-demo"
 import { AccessCodes, Playground, Walkthrough, btnLine, btnPrimary } from "@/components/playground"
+import type { WorldName } from "@/components/world"
+import { PROJECTS, type ProjectId } from "@/lib/projects"
 
-/** The index, then each project as a scroll-told scene that lands on its demo */
-export function Work() {
-  return (
-    <>
-      <WorkIndex />
+/**
+ * How each project in lib/projects.ts is shown: the passage that leads into
+ * it (unused for the first, which the index opens) and its scene with the
+ * playground the scene lets go onto. The page order is lib/projects.ts's.
+ */
+type Showcase = {
+  Passage: (props: { from: WorldName; to: ProjectId }) => React.ReactNode
+  Scene: () => React.ReactNode
+}
 
+const SHOWCASES: Record<ProjectId, Showcase> = {
+  zetix: {
+    Passage: CalendarPassage,
+    Scene: () => (
       <ZetixScene>
         <Playground
           kicker="Your turn at the door"
@@ -45,9 +56,12 @@ export function Work() {
           demo={<ScannerDemo />}
         />
       </ZetixScene>
+    ),
+  },
 
-      <CalendarPassage />
-
+  assistant: {
+    Passage: CalendarPassage,
+    Scene: () => (
       <StudyScene>
         <Playground
           kicker="Run the solver"
@@ -72,9 +86,12 @@ export function Work() {
           demoFirst
         />
       </StudyScene>
+    ),
+  },
 
-      <CapturePassage />
-
+  event: {
+    Passage: CapturePassage,
+    Scene: () => (
       <FieldScene>
         <Playground
           kicker="Play a round"
@@ -106,8 +123,25 @@ export function Work() {
           demo={<TerritoryDemo />}
         />
       </FieldScene>
+    ),
+  },
+}
 
-      <PaperPassage />
+/** The index, then each project as a scroll-told scene that lands on its demo */
+export function Work() {
+  return (
+    <>
+      <WorkIndex />
+      {PROJECTS.map((p, i) => {
+        const { Passage, Scene } = SHOWCASES[p.id]
+        return (
+          <Fragment key={p.id}>
+            {i > 0 && <Passage from={PROJECTS[i - 1].world} to={p.id} />}
+            <Scene />
+          </Fragment>
+        )
+      })}
+      <PaperPassage from={PROJECTS[PROJECTS.length - 1].world} />
     </>
   )
 }
