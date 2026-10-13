@@ -72,13 +72,15 @@ function themeVars(t: (typeof THEMES)[number]) {
   }
 }
 
+// Concept graph, top to bottom: the element, the two base operations, the
+// two compound ones built from both, and what they're for
 const NODES = [
-  { id: "se", label: "Structuring element", x: 50, y: 50 },
-  { id: "er", label: "Erosion", x: 18, y: 22 },
-  { id: "di", label: "Dilation", x: 82, y: 22 },
-  { id: "op", label: "Opening", x: 18, y: 80 },
-  { id: "cl", label: "Closing", x: 82, y: 80 },
-  { id: "nr", label: "Noise removal", x: 50, y: 96 },
+  { id: "se", label: "Structuring element", x: 50, y: 6 },
+  { id: "er", label: "Erosion", x: 20, y: 34 },
+  { id: "di", label: "Dilation", x: 80, y: 34 },
+  { id: "op", label: "Opening", x: 20, y: 66 },
+  { id: "cl", label: "Closing", x: 80, y: 66 },
+  { id: "nr", label: "Noise removal", x: 50, y: 94 },
 ]
 const EDGES = [
   ["se", "er"], ["se", "di"], ["er", "op"], ["di", "op"], ["er", "cl"], ["di", "cl"], ["op", "nr"], ["cl", "nr"],
@@ -242,9 +244,8 @@ function IngestView() {
                 pathLength={1}
                 strokeDasharray="1"
                 strokeDashoffset="1"
-                vectorEffect="non-scaling-stroke"
                 className="a-themed stroke-[var(--a-fg)] opacity-40"
-                strokeWidth={1.25}
+                strokeWidth={0.6}
               />
             )
           })}

@@ -128,7 +128,8 @@ function animate(tl: gsap.core.Timeline, { q }: SceneContext) {
   })
 
   // 3. Two teams, one building, one winner
-  tl.to(q("[data-map-dim]"), { autoAlpha: 1, duration: 0.08 }, 1.95)
+  // The map steps right back so the race card stands alone
+  tl.to(q("[data-board], [data-board-panel]"), { autoAlpha: 0.1, scale: 0.97, duration: 0.08 }, 1.95)
     .to(q(`[data-fill="${RACE_PLOT}"]`), { fillOpacity: 0, duration: 0.01 }, 1.95)
     .fromTo(q("[data-race]"), { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.1, ease: "power3.out" }, 2.0)
     .fromTo(q("[data-race-a]"), { autoAlpha: 0, x: -14 }, { autoAlpha: 1, x: 0, duration: 0.05, stagger: 0.12 }, 2.12)
@@ -137,15 +138,14 @@ function animate(tl: gsap.core.Timeline, { q }: SceneContext) {
     .fromTo(ping(RACE_PLOT), { scale: 0.2, autoAlpha: 0.9 }, { scale: 2.6, autoAlpha: 0, duration: 0.1 }, 2.42)
     .fromTo(q("[data-race-end]"), { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.06 }, 2.62)
     .to(q("[data-race]"), { autoAlpha: 0, scale: 0.96, duration: 0.1, ease: "power2.in" }, 2.88)
-    .to(q("[data-map-dim]"), { autoAlpha: 0, duration: 0.08 }, 2.9)
+    .to(q("[data-board], [data-board-panel]"), { autoAlpha: 1, scale: 1, duration: 0.08 }, 2.9)
 
   // 4. One code per device, three tiers
-  tl.to(q("[data-board]"), { autoAlpha: 0.12, scale: 0.96, duration: 0.12 }, 3.0)
-    .to(q("[data-board-panel]"), { autoAlpha: 0, duration: 0.08 }, 3.0)
+  tl.to(q("[data-board], [data-board-panel]"), { autoAlpha: 0.1, scale: 0.97, duration: 0.12 }, 3.0)
     .fromTo(
       q("[data-device]"),
       { autoAlpha: 0, y: 80, rotate: (i) => (i - 1) * 6 },
-      { autoAlpha: 1, y: 0, rotate: (i) => (i - 1) * 3, duration: 0.16, stagger: 0.08, ease: "power3.out" },
+      { autoAlpha: 1, y: 0, rotate: 0, duration: 0.16, stagger: 0.08, ease: "power3.out" },
       3.06
     )
     .fromTo(q("[data-code]"), { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.16, ease: "steps(10)", stagger: 0.08 }, 3.2)
@@ -204,7 +204,6 @@ function Board() {
               </text>
             ))}
           </svg>
-          <div data-map-dim className="invisible absolute inset-0 bg-[#fffdf3]/60" />
         </div>
       </div>
 
@@ -288,7 +287,7 @@ function Devices() {
             <p data-code className="mt-1 font-mono text-[11px] md:text-[13px]">
               {d.code}
             </p>
-            <p className="mt-auto text-[clamp(1.1rem,2.2vw,1.8rem)] font-bold leading-none">{d.role}</p>
+            <p className="mt-[28%] text-[clamp(1.1rem,2.2vw,1.8rem)] font-bold leading-none">{d.role}</p>
             <p className="mt-2 text-[10px] leading-snug opacity-85 md:text-[11px]">{d.note}</p>
           </div>
         </div>
