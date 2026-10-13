@@ -33,6 +33,16 @@ Worlds: palettes now apply to any `[data-world]` element, not only `<html>`. Sec
 
 Assets: `public/scenes/zetix-*.webp`, converted from `zetix/docs/screenshots`.
 
+## Getting around fast
+
+Recruiters won't sit through every scene, so there are three shortcuts:
+
+- **Folio menu:** the bottom-left folio opens a menu of every section, with a Demo link per project and the résumé.
+- **Scene links:** each scene's header has "Skip to the demo" and "Next: …". The demos sit at `#<id>-demo`.
+- **Résumé in the nav.**
+
+All of them go through `useJump()` (`components/jump.tsx`). Jumps under two screens glide; longer ones cut through a quick ink fade, so nobody watches three scenes fly past. Pinned sections use `scroll-mt-0` so they land on the pin start.
+
 ## Adding a project
 
 `lib/projects.ts` is the one list. Its order is the page order, and everything countable comes from it: the index rows and their numbers, "Three projects", every "02 / 03", the scene titles and anchors, the opening window (always the first project), the passages between neighbours, and the folio.

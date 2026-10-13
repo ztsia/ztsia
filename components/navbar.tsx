@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import { usePathname } from "next/navigation"
-import { useLenis } from "lenis/react"
+import { useJump } from "@/components/jump"
 import {
   Sheet,
   SheetContent,
@@ -23,7 +23,7 @@ export function Navbar() {
   const header = useRef<HTMLElement>(null)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const lenis = useLenis()
+  const jump = useJump()
   const onHome = pathname === "/"
 
   // Hide while reading down, show when scrolling back up. The bar has no
@@ -44,10 +44,8 @@ export function Navbar() {
 
   function go(e: React.MouseEvent, hash: string) {
     setOpen(false)
-    if (!onHome || !lenis) return
-    e.preventDefault()
-    lenis.scrollTo(hash)
-    history.replaceState(null, "", hash)
+    if (!onHome) return
+    if (jump(hash)) e.preventDefault()
   }
 
   return (
@@ -77,6 +75,9 @@ export function Navbar() {
               {l.label}
             </a>
           ))}
+          <a href="/Sia_Zhong_Tai_Resume.pdf" download className="link-draw text-[15px]">
+            Résumé
+          </a>
           <ThemeToggle />
         </div>
 
@@ -109,6 +110,13 @@ export function Navbar() {
                 {l.label}
               </a>
             ))}
+            <a
+              href="/Sia_Zhong_Tai_Resume.pdf"
+              download
+              className="font-wide py-2 text-4xl font-extrabold tracking-[-0.02em] [--wdth:112]"
+            >
+              Résumé
+            </a>
           </nav>
         </SheetContent>
       </Sheet>

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import Image from "next/image"
-import { useLenis } from "lenis/react"
+import { useJump } from "@/components/jump"
 import { gsap, useGSAP, SCENE, MOTION_OK } from "@/lib/gsap"
 import { worldTrigger } from "@/components/world"
 import { cn } from "@/lib/utils"
@@ -17,7 +17,7 @@ const FIRST = PROJECTS[0]
  */
 export function WorkIndex() {
   const root = useRef<HTMLElement>(null)
-  const lenis = useLenis()
+  const jump = useJump()
   const [hover, setHover] = useState<number | null>(null)
 
   useGSAP(
@@ -116,9 +116,7 @@ export function WorkIndex() {
   )
 
   function open(e: React.MouseEvent, id: string) {
-    if (!lenis) return
-    e.preventDefault()
-    lenis.scrollTo(`#${id}`, { duration: 2.2, offset: 0 })
+    if (jump(`#${id}`)) e.preventDefault()
   }
 
   return (
@@ -128,7 +126,7 @@ export function WorkIndex() {
       data-world="ink"
       data-chapter="Index"
       aria-label="Selected work"
-      className="world-paint relative"
+      className="world-paint relative scroll-mt-0"
     >
       <div data-pin className="relative flex min-h-[100svh] flex-col overflow-hidden">
       <IndexList onHover={setHover} onOpen={open} />

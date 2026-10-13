@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { ReactLenis, useLenis, type LenisRef } from "lenis/react"
 import { gsap, ScrollTrigger } from "@/lib/gsap"
+import { JumpCurtain } from "@/components/jump"
 
 // Keeps ScrollTrigger in step with Lenis. Must sit inside <ReactLenis>.
 function ScrollTriggerSync() {
@@ -39,6 +40,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     >
       <ScrollTriggerSync />
       {children}
+      <JumpCurtain />
     </ReactLenis>
   )
 }

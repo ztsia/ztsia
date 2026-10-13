@@ -172,7 +172,7 @@ export function Hero() {
       id="hero"
       data-chapter="Sia Zhong Tai"
       ref={root}
-      className="relative isolate overflow-hidden"
+      className="relative isolate scroll-mt-0 overflow-hidden"
     >
       <div
         ref={lensRef}
@@ -192,7 +192,7 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute left-0 top-0 z-10 rounded-full border-[1.5px] border-w-fg opacity-0"
       />
-      <div className="mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-end px-4 pb-8 pt-28 sm:px-6 md:px-10 md:pb-10">
+      <div className="mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-end px-4 pb-20 pt-28 sm:px-6 md:px-10 md:pb-20">
       <h1
         ref={nameRef}
         data-intro

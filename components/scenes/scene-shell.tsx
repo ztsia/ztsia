@@ -3,7 +3,8 @@
 import { useRef } from "react"
 import { gsap, useGSAP, SCENE } from "@/lib/gsap"
 import { worldTrigger } from "@/components/world"
-import { folioOf, projectOf, type ProjectId } from "@/lib/projects"
+import { PROJECTS, folioOf, projectOf, type ProjectId } from "@/lib/projects"
+import { useJump } from "@/components/jump"
 import { cn } from "@/lib/utils"
 
 export type Chapter = { title: string; body: string }
@@ -47,6 +48,7 @@ export function SceneShell({
   const root = useRef<HTMLElement>(null)
   const { id, world, title } = projectOf(project)
   const index = folioOf(project)
+  const next = PROJECTS[PROJECTS.findIndex((p) => p.id === project) + 1]
 
   useGSAP(
     () => {
@@ -132,7 +134,7 @@ export function SceneShell({
       data-world={world}
       data-chapter={title}
       aria-label={title}
-      className="world-paint font-world relative"
+      className="world-paint font-world relative scroll-mt-0"
     >
       {/* Scroll-told version */}
       <div data-pin className="scene-only relative h-[100svh] overflow-hidden">
@@ -144,6 +146,7 @@ export function SceneShell({
               <h2 className="truncate text-lg font-semibold leading-tight tracking-[-0.02em] md:mt-2 md:whitespace-normal md:text-[clamp(2rem,4.6vw,4.4rem)] md:leading-[0.95] md:tracking-[-0.04em]">
                 {title}
               </h2>
+              <Skip demo={`#${id}-demo`} next={next ? { hash: `#${next.id}`, label: next.title } : { hash: "#about", label: "About" }} />
             </div>
             <div data-caps className="relative hidden flex-1 md:block">
               <Captions chapters={chapters} />
@@ -206,8 +209,27 @@ export function SceneShell({
         </dl>
       </div>
 
-      {children}
+      <div id={`${id}-demo`}>{children}</div>
     </section>
+  )
+}
+
+/** For visitors in a hurry: straight to the demo, or on to the next project */
+function Skip({ demo, next }: { demo: string; next: { hash: string; label: string } }) {
+  const jump = useJump()
+  const go = (e: React.MouseEvent, hash: string) => {
+    if (jump(hash)) e.preventDefault()
+  }
+  return (
+    <div className="ml-auto flex shrink-0 items-center gap-4 text-sm md:ml-0 md:mt-5 md:gap-5">
+      <a href={demo} onClick={(e) => go(e, demo)} className="link-draw whitespace-nowrap">
+        <span className="md:hidden">Skip &darr;</span>
+        <span className="hidden md:inline">Skip to the demo &darr;</span>
+      </a>
+      <a href={next.hash} onClick={(e) => go(e, next.hash)} className="link-draw hidden whitespace-nowrap text-w-soft md:inline">
+        Next: {next.label} &rarr;
+      </a>
+    </div>
   )
 }
 
