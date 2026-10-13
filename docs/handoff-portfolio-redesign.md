@@ -33,6 +33,16 @@ Worlds: palettes now apply to any `[data-world]` element, not only `<html>`. Sec
 
 Assets: `public/scenes/zetix-*.webp`, converted from `zetix/docs/screenshots`.
 
+## Adding a project
+
+1. Add the entry to `PROJECTS` in `components/work-index.tsx` (number, title, colours, thumbnail).
+2. Add a world palette in `app/globals.css` (`[data-world="name"]`) and its name to `WorldName` in `components/world.tsx`.
+3. Write a scene: `<SceneShell>` takes chapters, facts, a stage and an `animate(tl, ctx)` that adds tweens at `ctx.at(i)`. Mock screens go inside `<Fit width height>` (`components/scenes/fit.tsx`): build them at one design size, and they scale to the stage on phones.
+4. Mount it in `components/work.tsx` with a `<Playground>` child, and put a passage before it: reuse one from `transitions.tsx`, or add one with `Passage`.
+5. Update the "0N / 0M" strings. They are written by hand in each scene, transition card and index row.
+
+Only the opening window from the index is wired to project 01 specifically.
+
 ## Ideas not done yet
 
 - The case-study page is still only restyled. A Flip or page transition from the study scene into it would fit.

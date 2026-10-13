@@ -173,7 +173,7 @@ function App() {
       <div
         data-app
         style={{ ...themeVars(THEMES[0]), fontFamily: "var(--a-font)" } as React.CSSProperties}
-        className="a-themed relative flex aspect-[4/3] max-h-full w-full max-w-[44rem] overflow-hidden rounded-[calc(var(--a-radius)*1.2)] border border-[var(--a-border)] bg-[var(--a-bg)] text-[var(--a-fg)] shadow-[0_40px_80px_-40px_rgba(15,26,58,0.45)]"
+        className="a-themed relative flex size-full max-w-[44rem] md:aspect-[4/3] md:h-auto md:max-h-full overflow-hidden rounded-[calc(var(--a-radius)*1.2)] border border-[var(--a-border)] bg-[var(--a-bg)] text-[var(--a-fg)] shadow-[0_40px_80px_-40px_rgba(15,26,58,0.45)]"
       >
         <aside className="a-themed hidden w-14 shrink-0 flex-col items-center gap-3 border-r border-[var(--a-border)] bg-[var(--a-card)] py-4 sm:flex">
           <span className="a-themed size-7 rounded-[var(--a-radius)] bg-[var(--a-primary)]" />
@@ -271,7 +271,7 @@ function WeekView() {
   return (
     <div data-view-week className="invisible absolute inset-3 flex flex-col sm:inset-4">
       <div
-        className="a-themed grid flex-1 grid-cols-[1.6rem_repeat(5,minmax(0,1fr))] gap-x-1 rounded-[var(--a-radius)] border border-[var(--a-border)] bg-[var(--a-card)] p-2"
+        className="a-themed grid min-h-0 flex-1 grid-cols-[1.6rem_repeat(5,minmax(0,1fr))] gap-x-1 rounded-[var(--a-radius)] border border-[var(--a-border)] bg-[var(--a-card)] p-2"
         style={{ gridTemplateRows: `1.2rem repeat(${ROWS}, minmax(0,1fr))` }}
       >
         {["Mon", "Tue", "Wed", "Thu", "Fri"].map((d, i) => (
@@ -328,7 +328,7 @@ function WeekView() {
 
 function QuizView() {
   return (
-    <div data-view-quiz className="invisible absolute inset-3 grid gap-3 sm:inset-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+    <div data-view-quiz className="invisible absolute inset-3 grid content-start gap-3 sm:inset-4 sm:content-stretch sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
       <div className="a-themed flex min-h-0 flex-col rounded-[var(--a-radius)] border border-[var(--a-border)] bg-[var(--a-card)] p-3">
         <p className="text-[10px] uppercase tracking-[0.1em] opacity-60">Weakest concept: Opening</p>
         <p className="mt-1.5 text-[12px] font-semibold leading-snug sm:text-[13px]">

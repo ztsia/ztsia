@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { gsap } from "@/lib/gsap"
 import { SceneShell, type SceneContext } from "@/components/scenes/scene-shell"
+import { Fit } from "@/components/scenes/fit"
 import { cn } from "@/lib/utils"
 
 const CHAPTERS = [
@@ -120,11 +121,12 @@ function animate(tl: gsap.core.Timeline, { q, mobile }: SceneContext) {
 
 function Phone() {
   return (
-    <div className="absolute inset-0 grid place-items-center">
+    <div className="absolute inset-0">
+      <Fit width={300} height={634}>
       <div
         data-phone
         style={geist}
-        className="relative aspect-[9/19] h-[min(86%,640px)] rounded-[2.6rem] border border-[#3b3646] bg-[#0f0d14] p-[3.2%] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)]"
+        className="relative size-full rounded-[2.6rem] border border-[#3b3646] bg-[#0f0d14] p-[10px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)]"
       >
         <div className="relative h-full overflow-hidden rounded-[2.2rem] bg-[#0a0a0b] text-[#f2f2f2]">
           {/* Status bar */}
@@ -240,6 +242,7 @@ function Phone() {
           </div>
         </div>
       </div>
+      </Fit>
 
       {/* Guests at the door */}
       {[

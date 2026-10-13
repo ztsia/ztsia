@@ -138,11 +138,12 @@ export function SceneShell({
     >
       {/* Scroll-told version */}
       <div data-pin className="scene-only relative h-[100svh] overflow-hidden">
-        <div className="mx-auto flex h-full max-w-[1400px] flex-col px-4 pb-14 pt-20 sm:px-6 md:grid md:grid-cols-12 md:gap-x-10 md:px-10 md:pb-10 md:pt-24">
+        <div className="mx-auto flex h-full max-w-[1400px] flex-col px-4 pb-12 pt-[4.25rem] sm:px-6 md:grid md:grid-cols-12 md:gap-x-10 md:px-10 md:pb-10 md:pt-24">
           <div className="relative flex flex-col md:col-span-5 md:h-full">
-            <div>
-              <p className="tabular text-sm text-w-soft">{index}</p>
-              <h2 className="mt-2 text-[clamp(2rem,4.6vw,4.4rem)] font-semibold leading-[0.95] tracking-[-0.04em]">
+            {/* One compact line on phones, where the stage needs the height */}
+            <div className="flex min-w-0 items-baseline gap-3 md:block">
+              <p className="tabular shrink-0 text-sm text-w-soft">{index}</p>
+              <h2 className="truncate text-lg font-semibold leading-tight tracking-[-0.02em] md:mt-2 md:whitespace-normal md:text-[clamp(2rem,4.6vw,4.4rem)] md:leading-[0.95] md:tracking-[-0.04em]">
                 {title}
               </h2>
             </div>
@@ -152,11 +153,11 @@ export function SceneShell({
             <Progress n={chapters.length} className="hidden md:flex" />
           </div>
 
-          <div data-stage className="relative min-h-0 flex-1 md:col-span-7 md:h-full">
+          <div data-stage className="relative my-3 min-h-0 flex-1 md:col-span-7 md:my-0 md:h-full">
             {stage}
           </div>
 
-          <div data-caps className="relative h-[30svh] shrink-0 md:hidden">
+          <div data-caps className="relative h-[12.75rem] shrink-0 md:hidden">
             <Captions chapters={chapters} />
           </div>
           <Progress n={chapters.length} className="md:hidden" />
@@ -224,10 +225,12 @@ function Captions({ chapters }: { chapters: Chapter[] }) {
           <p className="tabular text-sm text-w-soft">
             {String(i + 1).padStart(2, "0")} / {String(chapters.length).padStart(2, "0")}
           </p>
-          <h3 className="mt-2 text-[clamp(1.6rem,2.8vw,2.6rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
+          <h3 className="mt-1.5 text-[clamp(1.4rem,2.8vw,2.6rem)] font-semibold leading-[1.02] tracking-[-0.03em] md:mt-2">
             {c.title}
           </h3>
-          <p className="mt-3 max-w-[46ch] text-[15px] leading-relaxed text-w-soft md:text-[17px]">{c.body}</p>
+          <p className="mt-2 max-w-[46ch] text-[14.5px] leading-snug text-w-soft md:mt-3 md:text-[17px] md:leading-relaxed">
+            {c.body}
+          </p>
         </div>
       ))}
     </>
