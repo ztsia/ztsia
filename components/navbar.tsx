@@ -1,127 +1,125 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Menu } from "lucide-react"
-import { buttonVariants } from "@/components/ui/button"
+import { useRef, useState } from "react"
+import { usePathname } from "next/navigation"
+import { useJump } from "@/components/jump"
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetFooter,
 } from "@/components/ui/sheet"
-import { Separator } from "@/components/ui/separator"
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useGSAP, ScrollTrigger } from "@/lib/gsap"
 import { cn } from "@/lib/utils"
 
+const LINKS = [
+  { label: "Work", hash: "#work" },
+  { label: "About", hash: "#about" },
+  { label: "Contact", hash: "#contact" },
+]
+
 export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [sheetOpen, setSheetOpen] = useState(false)
+  const header = useRef<HTMLElement>(null)
+  const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+  const jump = useJump()
+  const onHome = pathname === "/"
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0)
-    }
+  // Hide while reading down, show when scrolling back up. The bar has no
+  // ground of its own: it inverts whatever world is under it.
+  useGSAP(() => {
+    const el = header.current!
+    const st = ScrollTrigger.create({
+      start: 0,
+      end: "max",
+      onUpdate(self) {
+        const scrolled = self.scroll() > 24
+        el.dataset.scrolled = String(scrolled)
+        el.dataset.hidden = String(scrolled && self.direction === 1 && self.scroll() > 400)
+      },
+    })
+    return () => st.kill()
+  })
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  function go(e: React.MouseEvent, hash: string) {
+    setOpen(false)
+    if (!onHome) return
+    if (jump(hash)) e.preventDefault()
+  }
 
   return (
     <header
-      className={cn(
-        "fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-sm transition-all",
-        isScrolled && "border-b border-border"
-      )}
+      ref={header}
+      data-hidden="false"
+      data-scrolled="false"
+      className="fixed inset-x-0 top-0 z-50 text-white mix-blend-difference transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] data-[hidden=true]:-translate-y-full"
     >
-      <nav className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
+      <nav className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-4 sm:px-6 md:px-10">
         <a
-          href="/#hero"
-          className="font-mono font-semibold text-foreground hover:text-primary transition-colors"
+          href={onHome ? "#hero" : "/"}
+          onClick={(e) => onHome && go(e, "#hero")}
+          className="font-wide text-[17px] font-extrabold tracking-[-0.01em] [--wdth:118]"
         >
           ztsia
         </a>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <a
-            href="/#about"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            About
-          </a>
-          <a
-            href="/#projects"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Projects
-          </a>
-          <a
-            href="/#skills"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Skills
-          </a>
-          <a
-            href="/#contact"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Contact
-          </a>
-          <ThemeToggle />
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className="flex md:hidden items-center gap-2">
-          <ThemeToggle />
-          <Tooltip>
-            <TooltipTrigger
-              className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
-              aria-label="Open menu"
-              onClick={() => setSheetOpen(true)}
+        <div className="hidden items-center gap-8 md:flex">
+          {LINKS.map((l) => (
+            <a
+              key={l.hash}
+              href={onHome ? l.hash : `/${l.hash}`}
+              onClick={(e) => go(e, l.hash)}
+              className="link-draw text-[15px]"
             >
-              <Menu className="h-5 w-5" />
-            </TooltipTrigger>
-            <TooltipContent side="bottom">Navigation</TooltipContent>
-          </Tooltip>
+              {l.label}
+            </a>
+          ))}
+          <a href="/Sia_Zhong_Tai_Resume.pdf" download className="link-draw text-[15px]">
+            Résumé
+          </a>
+          <ThemeToggle />
         </div>
 
-        {/* Mobile Sheet */}
-        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-          <SheetContent side="right" className="data-[side=right]:w-4/5 flex flex-col overflow-y-auto">
-            <SheetHeader>
-              <SheetTitle className="font-mono font-semibold text-foreground">ztsia</SheetTitle>
-            </SheetHeader>
-            <nav className="flex flex-col px-2 mt-4 gap-1 flex-1">
-              {[
-                { label: "About", href: "/#about" },
-                { label: "Projects", href: "/#projects" },
-                { label: "Skills", href: "/#skills" },
-                { label: "Contact", href: "/#contact" },
-              ].map(({ label, href }) => (
-                <a
-                  key={href}
-                  href={href}
-                  onClick={() => setSheetOpen(false)}
-                  className="block rounded-md px-4 py-3 text-base font-medium text-foreground hover:bg-muted hover:text-primary transition-colors"
-                >
-                  {label}
-                </a>
-              ))}
-            </nav>
-            <Separator />
-            <SheetFooter className="pt-4">
-              <ThemeToggle />
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            className="inline-flex h-9 items-center px-2 text-[15px] font-medium"
+          >
+            Menu
+          </button>
+        </div>
       </nav>
+
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="right" className="w-4/5 bg-background">
+          <SheetHeader>
+            <SheetTitle className="font-wide text-lg font-extrabold [--wdth:118]">ztsia</SheetTitle>
+          </SheetHeader>
+          <nav className="mt-6 grid gap-1 px-4">
+            {LINKS.map((l) => (
+              <a
+                key={l.hash}
+                href={onHome ? l.hash : `/${l.hash}`}
+                onClick={(e) => go(e, l.hash)}
+                className={cn("font-wide py-2 text-4xl font-extrabold tracking-[-0.02em] [--wdth:112]")}
+              >
+                {l.label}
+              </a>
+            ))}
+            <a
+              href="/Sia_Zhong_Tai_Resume.pdf"
+              download
+              className="font-wide py-2 text-4xl font-extrabold tracking-[-0.02em] [--wdth:112]"
+            >
+              Résumé
+            </a>
+          </nav>
+        </SheetContent>
+      </Sheet>
     </header>
   )
 }

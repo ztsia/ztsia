@@ -1,71 +1,42 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
-import { Moon, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { useSyncExternalStore } from "react"
 
+const subscribe = () => () => {}
+
+// A text toggle: says what it switches to
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false)
+  const next = resolvedTheme === "dark" ? "light" : "dark"
 
-  useEffect(() => setMounted(true), [])
-
-  function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
-    if (!mounted) return
-    const newTheme = resolvedTheme === "dark" ? "light" : "dark"
-
-    const isAppearanceTransition =
-      typeof document !== "undefined" &&
-      "startViewTransition" in document &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-
-    if (!isAppearanceTransition) {
-      setTheme(newTheme)
+  function toggle(event: React.MouseEvent<HTMLButtonElement>) {
+    const canAnimate =
+      "startViewTransition" in document && !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    if (!canAnimate) {
+      setTheme(next)
       return
     }
-
     const x = event.clientX
     const y = event.clientY
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    )
-
-    const transition = document.startViewTransition(() => {
-      setTheme(newTheme)
-    })
-
-    transition.ready.then(() => {
+    const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+    document.startViewTransition(() => setTheme(next)).ready.then(() => {
       document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 450,
-          easing: "ease-in",
-          pseudoElement: "::view-transition-new(root)",
-        }
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+        { duration: 550, easing: "cubic-bezier(0.16, 1, 0.3, 1)", pseudoElement: "::view-transition-new(root)" }
       )
     })
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger render={<Button variant="ghost" size="icon" onClick={toggleTheme} />}>
-        <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        <span className="sr-only">Toggle theme</span>
-      </TooltipTrigger>
-      <TooltipContent>Toggle theme</TooltipContent>
-    </Tooltip>
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={mounted ? `Switch to ${next} theme` : "Switch theme"}
+      className="inline-flex h-9 min-w-12 items-center justify-center rounded-[2px] px-2 text-[15px] opacity-60 transition-opacity hover:opacity-100"
+    >
+      {mounted ? (next === "dark" ? "Dark" : "Light") : " "}
+    </button>
   )
 }

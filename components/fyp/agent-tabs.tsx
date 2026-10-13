@@ -15,7 +15,7 @@ const AGENT_ORDER = [
 export function AgentTabs({ markdown }: { markdown: Record<string, string> }) {
   return (
     <section className="py-16 border-t border-border">
-      <h2 className="text-2xl font-semibold text-foreground mb-8">The Agents</h2>
+      <h2 className="text-3xl font-bold tracking-[-0.02em] text-foreground mb-8">The agents</h2>
       <Tabs defaultValue="scheduler">
         <div className="overflow-x-auto pb-1">
           <TabsList variant="line" className="w-max">
